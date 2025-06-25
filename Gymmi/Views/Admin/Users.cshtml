@@ -1,0 +1,119 @@
+@model IEnumerable<Gymmi.Models.User>
+@{
+    ViewData["Title"] = "Quản Lý Người Dùng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-orange-600 to-orange-500 p-6 rounded-lg shadow-lg mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    <i class="fas fa-users mr-3"></i>
+                    Quản Lý Người Dùng
+                </h1>
+                <p class="text-orange-100 mt-2">Quản lý tài khoản và phân quyền người dùng</p>
+            </div>
+            <a href="@Url.Action("CreateUser", "Admin")" class="bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                <i class="fas fa-plus mr-2"></i>Thêm Người Dùng
+            </a>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="bg-gray-800 rounded-lg shadow-xl border border-gray-700">
+        <div class="p-6">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-700">
+                            <th class="text-left py-4 px-4 text-gray-300 font-semibold">ID</th>
+                            <th class="text-left py-4 px-4 text-gray-300 font-semibold">Họ Tên</th>
+                            <th class="text-left py-4 px-4 text-gray-300 font-semibold">Email</th>
+                            <th class="text-left py-4 px-4 text-gray-300 font-semibold">Số Điện Thoại</th>
+                            <th class="text-left py-4 px-4 text-gray-300 font-semibold">Vai Trò</th>
+                            <th class="text-left py-4 px-4 text-gray-300 font-semibold">Ngày Tạo</th>
+                            <th class="text-left py-4 px-4 text-gray-300 font-semibold">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var user in Model)
+                            {
+                                <tr class="border-b border-gray-700 hover:bg-gray-750 transition-colors">
+                                    <td class="py-4 px-4 text-white">@user.ID_User</td>
+                                    <td class="py-4 px-4 text-white">@user.HoTen</td>
+                                    <td class="py-4 px-4 text-gray-300">@user.Email</td>
+                                    <td class="py-4 px-4 text-gray-300">@user.Sdt</td>
+                                    <td class="py-4 px-4">
+                                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
+                                            @(user.Role?.TenRole ?? "Chưa xác định")
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-gray-300">@user.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex space-x-2">
+                                            <a href="@Url.Action("EditUser", "Admin", new { id = user.ID_User })" 
+                                               class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                                <i class="fas fa-edit mr-1"></i>Sửa
+                                            </a>
+                                            <button onclick="deleteUser(@user.ID_User)" 
+                                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                                <i class="fas fa-trash mr-1"></i>Xóa
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="py-8 px-4 text-center text-gray-400">
+                                    <i class="fas fa-users text-4xl mb-4"></i>
+                                    <p>Chưa có người dùng nào trong hệ thống</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+<script>
+    function deleteUser(userId) {
+        if (confirm('Bạn có chắc chắn muốn xóa người dùng này?\n\nLưu ý: Thao tác này không thể hoàn tác.')) {
+            // Create a form to submit the delete request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("DeleteUser", "Admin")';
+            
+            // Add anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token.value;
+                form.appendChild(tokenInput);
+            }
+            
+            // Add user ID
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'id';
+            idInput.value = userId;
+            form.appendChild(idInput);
+            
+            // Submit form
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script> 

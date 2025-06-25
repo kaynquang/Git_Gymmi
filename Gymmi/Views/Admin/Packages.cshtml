@@ -1,0 +1,164 @@
+@model List<Gymmi.Models.GoiTap>
+@{
+    ViewData["Title"] = "Quản Lý Gói Tập";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-yellow-600 to-yellow-500 p-6 shadow-lg">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    <i class="fas fa-box mr-3"></i>
+                    Quản Lý Gói Tập
+                </h1>
+                <p class="text-yellow-100 mt-2">Quản lý các gói tập luyện và giá cước</p>
+            </div>
+            <a href="@Url.Action("CreatePackage", "Admin")" class="bg-white text-yellow-600 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-50 transition-colors">
+                <i class="fas fa-plus mr-2"></i>
+                Thêm Gói Tập
+            </a>
+        </div>
+    </div>
+
+    <!-- Error/Success Messages -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="p-6">
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-4">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                @ViewBag.Error
+            </div>
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="p-6">
+            <div class="bg-green-600 text-white p-4 rounded-lg mb-4">
+                <i class="fas fa-check-circle mr-2"></i>
+                @TempData["Success"]
+            </div>
+        </div>
+    }
+
+    <!-- Package List -->
+    <div class="p-6">
+        @if (Model.Any())
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (var package in Model)
+                {
+                    <div class="bg-gray-800 rounded-lg shadow-xl border border-gray-700 hover:bg-gray-750 transition-all duration-300 overflow-hidden">
+                        <!-- Package Header -->
+                        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 p-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xl font-bold text-white">@package.TenGoiTap</h3>
+                                <span class="bg-white text-yellow-600 px-3 py-1 rounded-full text-sm font-semibold">
+                                    @package.ThoiHan ngày
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Package Body -->
+                        <div class="p-6">
+                            <div class="text-center mb-4">
+                                <div class="text-3xl font-bold text-white mb-2">
+                                    @package.GiaTien.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))
+                                </div>
+                                <div class="text-gray-400 text-sm">
+                                    @(package.GiaTien / package.ThoiHan).ToString("C0", new System.Globalization.CultureInfo("vi-VN"))/ngày
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(package.MoTa))
+                            {
+                                <div class="mb-4">
+                                    <p class="text-gray-300 text-sm text-center">@package.MoTa</p>
+                                </div>
+                            }
+
+                            <!-- Package Features -->
+                            <div class="space-y-2 mb-6">
+                                <div class="flex items-center text-gray-300">
+                                    <i class="fas fa-check text-green-400 mr-2"></i>
+                                    <span class="text-sm">Truy cập tất cả thiết bị</span>
+                                </div>
+                                <div class="flex items-center text-gray-300">
+                                    <i class="fas fa-check text-green-400 mr-2"></i>
+                                    <span class="text-sm">Tư vấn chương trình tập</span>
+                                </div>
+                                <div class="flex items-center text-gray-300">
+                                    <i class="fas fa-check text-green-400 mr-2"></i>
+                                    <span class="text-sm">Hỗ trợ 24/7</span>
+                                </div>
+                                @if (package.ThoiHan >= 30)
+                                {
+                                    <div class="flex items-center text-gray-300">
+                                        <i class="fas fa-check text-green-400 mr-2"></i>
+                                        <span class="text-sm">Tặng 1 buổi tập cùng PT</span>
+                                    </div>
+                                }
+                                @if (package.ThoiHan >= 90)
+                                {
+                                    <div class="flex items-center text-gray-300">
+                                        <i class="fas fa-check text-green-400 mr-2"></i>
+                                        <span class="text-sm">Đo thành phần cơ thể miễn phí</span>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex space-x-2">
+                                <a href="@Url.Action("EditPackage", "Admin", new { id = package.ID_GoiTap })" 
+                                   class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded text-xs text-center transition-colors">
+                                    <i class="fas fa-edit mr-1"></i>Sửa
+                                </a>
+                                <a href="@Url.Action("ViewPackage", "Admin", new { id = package.ID_GoiTap })" 
+                                   class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-xs text-center transition-colors">
+                                    <i class="fas fa-eye mr-1"></i>Xem
+                                </a>
+                                <button onclick="deletePackage(@package.ID_GoiTap)" 
+                                        class="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-xs transition-colors">
+                                    <i class="fas fa-trash mr-1"></i>Xóa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="bg-gray-800 rounded-lg p-8 text-center">
+                <i class="fas fa-box text-6xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-semibold text-white mb-2">Chưa có gói tập nào</h3>
+                <p class="text-gray-400 mb-4">Bắt đầu bằng cách tạo gói tập đầu tiên</p>
+                <a href="@Url.Action("CreatePackage", "Admin")" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i>
+                    Thêm Gói Tập
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+function deletePackage(id) {
+    if (confirm('Bạn có chắc chắn muốn xóa gói tập này? Điều này có thể ảnh hưởng đến các hội viên đang sử dụng.')) {
+        fetch(`/Admin/DeletePackage/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Có lỗi xảy ra khi xóa gói tập');
+            }
+        });
+    }
+}
+</script> 

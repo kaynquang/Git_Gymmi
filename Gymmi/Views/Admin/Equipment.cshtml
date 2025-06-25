@@ -1,0 +1,144 @@
+@model List<Gymmi.Models.ThietBi>
+@{
+    ViewData["Title"] = "Quản Lý Thiết Bị";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-purple-600 to-purple-500 p-6 shadow-lg">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    <i class="fas fa-dumbbell mr-3"></i>
+                    Quản Lý Thiết Bị
+                </h1>
+                <p class="text-purple-100 mt-2">Quản lý thiết bị tập luyện và bảo trì</p>
+            </div>
+            <a href="@Url.Action("CreateEquipment", "Admin")" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors">
+                <i class="fas fa-plus mr-2"></i>
+                Thêm Thiết Bị
+            </a>
+        </div>
+    </div>
+
+    <!-- Error/Success Messages -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="p-6">
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-4">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                @ViewBag.Error
+            </div>
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="p-6">
+            <div class="bg-green-600 text-white p-4 rounded-lg mb-4">
+                <i class="fas fa-check-circle mr-2"></i>
+                @TempData["Success"]
+            </div>
+        </div>
+    }
+
+    <!-- Equipment List -->
+    <div class="p-6">
+        @if (Model.Any())
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (var equipment in Model)
+                {
+                    <div class="bg-gray-800 rounded-lg shadow-xl p-6 border border-gray-700 hover:bg-gray-750 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-dumbbell text-white text-xl"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-lg font-semibold text-white">@equipment.TenThietBi</h3>
+                                    <p class="text-sm text-gray-400">ID: @equipment.ID_ThietBi</p>
+                                </div>
+                            </div>
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                @(equipment.TrangThai == "Hoạt động" ? "bg-green-100 text-green-800" : 
+                                  equipment.TrangThai == "Bảo trì" ? "bg-yellow-100 text-yellow-800" : 
+                                  "bg-red-100 text-red-800")">
+                                @equipment.TrangThai
+                            </span>
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Phòng tập:</span>
+                                <span class="text-white">@(equipment.PhongTap?.TenPhong ?? "Chưa phân bổ")</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Ngày mua:</span>
+                                <span class="text-white">@equipment.NgayMua.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Người quản lý:</span>
+                                <span class="text-white">@(equipment.User?.HoTen ?? "Chưa phân công")</span>
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(equipment.MoTa))
+                        {
+                            <div class="mb-4">
+                                <p class="text-gray-300 text-sm">@equipment.MoTa</p>
+                            </div>
+                        }
+
+                        <div class="flex space-x-2 pt-4 border-t border-gray-700">
+                            <a href="@Url.Action("EditEquipment", "Admin", new { id = equipment.ID_ThietBi })" 
+                               class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded text-xs text-center transition-colors">
+                                <i class="fas fa-edit mr-1"></i>Sửa
+                            </a>
+                            <a href="@Url.Action("ViewEquipment", "Admin", new { id = equipment.ID_ThietBi })" 
+                               class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-xs text-center transition-colors">
+                                <i class="fas fa-eye mr-1"></i>Xem
+                            </a>
+                            <button onclick="deleteEquipment(@equipment.ID_ThietBi)" 
+                                    class="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-xs transition-colors">
+                                <i class="fas fa-trash mr-1"></i>Xóa
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="bg-gray-800 rounded-lg p-8 text-center">
+                <i class="fas fa-dumbbell text-6xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-semibold text-white mb-2">Chưa có thiết bị nào</h3>
+                <p class="text-gray-400 mb-4">Bắt đầu bằng cách thêm thiết bị đầu tiên</p>
+                <a href="@Url.Action("CreateEquipment", "Admin")" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i>
+                    Thêm Thiết Bị
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+function deleteEquipment(id) {
+    if (confirm('Bạn có chắc chắn muốn xóa thiết bị này?')) {
+        fetch(`/Admin/DeleteEquipment/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Có lỗi xảy ra khi xóa thiết bị');
+            }
+        });
+    }
+}
+</script> 

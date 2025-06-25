@@ -1,0 +1,199 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Gymmi
+build_property.RootNamespace = Gymmi
+build_property.ProjectDir = /Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi
+build_property._RazorSourceGeneratorDebug = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/CreateAssignment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQ3JlYXRlQXNzaWdubWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/CreateEquipment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQ3JlYXRlRXF1aXBtZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/CreateMember.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQ3JlYXRlTWVtYmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/CreatePackage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQ3JlYXRlUGFja2FnZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/CreateRoom.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQ3JlYXRlUm9vbS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/CreateUser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQ3JlYXRlVXNlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/DisposalInvoices.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRGlzcG9zYWxJbnZvaWNlcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/EditAssignment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRWRpdEFzc2lnbm1lbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/EditEquipment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRWRpdEVxdWlwbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/EditMember.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRWRpdE1lbWJlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/EditPackage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRWRpdFBhY2thZ2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/EditRoom.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRWRpdFJvb20uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/EditUser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRWRpdFVzZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/Equipment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRXF1aXBtZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/Members.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vTWVtYmVycy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/Packages.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vUGFja2FnZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/PaymentInvoices.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vUGF5bWVudEludm9pY2VzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/Reports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vUmVwb3J0cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/Rooms.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vUm9vbXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/Users.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vVXNlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Admin/WorkAssignments.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vV29ya0Fzc2lnbm1lbnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Home/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Member/BookWorkout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVyL0Jvb2tXb3Jrb3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Member/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVyL0Rhc2hib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Member/Facilities.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVyL0ZhY2lsaXRpZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Member/Membership.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVyL01lbWJlcnNoaXAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Member/Packages.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVyL1BhY2thZ2VzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Member/PaymentHistory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVyL1BheW1lbnRIaXN0b3J5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Member/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVyL1Byb2ZpbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Member/Schedule.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWVtYmVyL1NjaGVkdWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Shared/_AdminLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19BZG1pbkxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Shared/_MemberLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19NZW1iZXJMYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Shared/_TrainerLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19UcmFpbmVyTGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Trainer/Clients.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVHJhaW5lci9DbGllbnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Trainer/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVHJhaW5lci9EYXNoYm9hcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Trainer/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVHJhaW5lci9Qcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Trainer/Schedule.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVHJhaW5lci9TY2hlZHVsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/kaynnguyen/Documents/Study/Do_An/LTW-NC-GYM/Gymmi/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-adjctzs23c

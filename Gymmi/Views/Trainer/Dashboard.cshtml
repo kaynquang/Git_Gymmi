@@ -1,0 +1,191 @@
+@{
+    ViewData["Title"] = "Trang Chủ Huấn Luyện Viên";
+    Layout = "~/Views/Shared/_TrainerLayout.cshtml";
+}
+
+<!-- Welcome Header -->
+<div class="bg-gradient-to-r from-orange-600 to-red-600 rounded-xl p-6 shadow-xl border border-orange-500 mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-white mb-2">
+                <i class="fas fa-user-tie mr-3 text-orange-200"></i>
+                Chào mừng, @ViewBag.Trainer?.HoTen!
+            </h1>
+            <p class="text-orange-100">Huấn luyện viên tại Gymmi Fitness Center</p>
+        </div>
+        <div class="hidden md:block">
+            <i class="fas fa-dumbbell text-6xl text-orange-200 opacity-30"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Total Assignments -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 hover:border-orange-500 transition-colors">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-400 text-sm">Tổng Phân Công</p>
+                <p class="text-3xl font-bold text-white">@ViewBag.TotalAssignments</p>
+                <p class="text-orange-400 text-sm">Tất cả thời gian</p>
+            </div>
+            <div class="p-4 bg-orange-500 rounded-full">
+                <i class="fas fa-tasks text-white text-2xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Assignments -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 hover:border-green-500 transition-colors">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-400 text-sm">Đang Hoạt Động</p>
+                <p class="text-3xl font-bold text-green-400">@ViewBag.ActiveAssignments</p>
+                <p class="text-green-400 text-sm">Phân công hiện tại</p>
+            </div>
+            <div class="p-4 bg-green-500 rounded-full">
+                <i class="fas fa-check-circle text-white text-2xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- This Week -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 hover:border-blue-500 transition-colors">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-400 text-sm">Tuần Này</p>
+                <p class="text-3xl font-bold text-blue-400">@ViewBag.ThisWeekAssignments</p>
+                <p class="text-blue-400 text-sm">Ca làm việc</p>
+            </div>
+            <div class="p-4 bg-blue-500 rounded-full">
+                <i class="fas fa-calendar-week text-white text-2xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Message -->
+@if (ViewBag.Error != null)
+{
+    <div class="bg-red-500 bg-opacity-10 border border-red-500 text-red-400 px-6 py-4 rounded-lg mb-6">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-3"></i>
+            <span>@ViewBag.Error</span>
+        </div>
+    </div>
+}
+
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Today's Schedule -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-white">
+                <i class="fas fa-calendar-day mr-3 text-orange-400"></i>
+                Lịch Hôm Nay
+            </h2>
+            <span class="text-gray-400">@DateTime.Today.ToString("dd/MM/yyyy")</span>
+        </div>
+
+        @if (ViewBag.TodayAssignments != null && ((List<PhanCong>)ViewBag.TodayAssignments).Any())
+        {
+            <div class="space-y-4">
+                @foreach (var assignment in (List<PhanCong>)ViewBag.TodayAssignments)
+                {
+                    <div class="bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg font-semibold text-white">@assignment.PhongTap?.TenPhong</h3>
+                            <span class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-full">
+                                @assignment.CaLamViec?.TenCa
+                            </span>
+                        </div>
+                        <p class="text-gray-400 text-sm">@assignment.CaLamViec?.MoTa</p>
+                        <p class="text-orange-400 text-sm mt-1">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            @assignment.TrangThai
+                        </p>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-8">
+                <i class="fas fa-calendar-times text-4xl text-gray-500 mb-4"></i>
+                <p class="text-gray-400">Không có lịch làm việc hôm nay</p>
+            </div>
+        }
+    </div>
+
+    <!-- Upcoming Schedule -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-white">
+                <i class="fas fa-clock mr-3 text-blue-400"></i>
+                Lịch Sắp Tới
+            </h2>
+            <span class="text-gray-400">7 ngày tới</span>
+        </div>
+
+        @if (ViewBag.UpcomingAssignments != null && ((List<PhanCong>)ViewBag.UpcomingAssignments).Any())
+        {
+            <div class="space-y-4">
+                @foreach (var assignment in ((List<PhanCong>)ViewBag.UpcomingAssignments).Take(5))
+                {
+                    <div class="bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg font-semibold text-white">@assignment.PhongTap?.TenPhong</h3>
+                            <span class="text-gray-400 text-sm">@assignment.NgayPhanCong.ToString("dd/MM")</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="inline-block px-3 py-1 bg-blue-500 text-white text-sm rounded-full">
+                                @assignment.CaLamViec?.TenCa
+                            </span>
+                            <p class="text-blue-400 text-sm">
+                                @assignment.TrangThai
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-8">
+                <i class="fas fa-calendar-check text-4xl text-gray-500 mb-4"></i>
+                <p class="text-gray-400">Không có lịch làm việc sắp tới</p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+    <a href="@Url.Action("Schedule", "Trainer")" 
+       class="bg-gradient-to-r from-orange-600 to-red-600 rounded-xl p-6 text-white text-center hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-xl">
+        <i class="fas fa-calendar-alt text-3xl mb-3"></i>
+        <h3 class="text-lg font-bold">Xem Lịch Đầy Đủ</h3>
+        <p class="text-sm text-orange-100">Toàn bộ lịch làm việc</p>
+    </a>
+    
+    <a href="@Url.Action("Profile", "Trainer")" 
+       class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white text-center hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl">
+        <i class="fas fa-user text-3xl mb-3"></i>
+        <h3 class="text-lg font-bold">Hồ Sơ</h3>
+        <p class="text-sm text-blue-100">Cập nhật thông tin</p>
+    </a>
+    
+    <a href="@Url.Action("Clients", "Trainer")" 
+       class="bg-gradient-to-r from-green-600 to-teal-600 rounded-xl p-6 text-white text-center hover:from-green-700 hover:to-teal-700 transition-all transform hover:scale-105 shadow-xl">
+        <i class="fas fa-users text-3xl mb-3"></i>
+        <h3 class="text-lg font-bold">Học Viên</h3>
+        <p class="text-sm text-green-100">Danh sách học viên</p>
+    </a>
+    
+    <a href="@Url.Action("Index", "Admin")" 
+       class="bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl p-6 text-white text-center hover:from-gray-700 hover:to-gray-800 transition-all transform hover:scale-105 shadow-xl">
+        <i class="fas fa-cog text-3xl mb-3"></i>
+        <h3 class="text-lg font-bold">Quản Trị</h3>
+        <p class="text-sm text-gray-100">Khu vực admin</p>
+    </a>
+</div>

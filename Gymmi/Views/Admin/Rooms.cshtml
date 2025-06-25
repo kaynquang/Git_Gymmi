@@ -1,0 +1,187 @@
+@model IEnumerable<Gymmi.Models.PhongTap>
+@{
+    ViewData["Title"] = "Quản Lý Phòng Tập";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
+    @Html.AntiForgeryToken()
+    
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-orange-600 to-orange-500 p-6 rounded-lg shadow-lg mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    <i class="fas fa-building mr-3"></i>
+                    Quản Lý Phòng Tập
+                </h1>
+                <p class="text-orange-100 mt-2">Quản lý thông tin phòng tập và cơ sở vật chất</p>
+            </div>
+            <a href="@Url.Action("CreateRoom", "Admin")" class="bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                <i class="fas fa-plus mr-2"></i>Thêm Phòng Tập
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-6 text-white shadow-xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-blue-100">Tổng Phòng Tập</p>
+                    <p class="text-3xl font-bold">@(Model?.Count() ?? 0)</p>
+                </div>
+                <i class="fas fa-building text-4xl text-blue-200"></i>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-6 text-white shadow-xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-green-100">Phòng Hoạt Động</p>
+                    <p class="text-3xl font-bold">@(Model?.Count(r => r.TinhTrang == "Hoạt động") ?? 0)</p>
+                </div>
+                <i class="fas fa-check-circle text-4xl text-green-200"></i>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-yellow-600 to-yellow-700 rounded-lg p-6 text-white shadow-xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-yellow-100">Phòng Bảo Trì</p>
+                    <p class="text-3xl font-bold">@(Model?.Count(r => r.TinhTrang == "Bảo trì") ?? 0)</p>
+                </div>
+                <i class="fas fa-tools text-4xl text-yellow-200"></i>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-6 text-white shadow-xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-purple-100">Tổng Sức Chứa</p>
+                    <p class="text-3xl font-bold">@(Model?.Sum(r => r.SucChua) ?? 0)</p>
+                </div>
+                <i class="fas fa-users text-4xl text-purple-200"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rooms Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var room in Model)
+            {
+                <div class="bg-gray-800 rounded-lg shadow-xl border border-gray-700 hover:border-orange-500 transition-all duration-300">
+                    <div class="p-6">
+                        <!-- Room Header -->
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">@room.TenPhong</h3>
+                                <span class="@(room.TinhTrang == "Hoạt động" ? "bg-green-100 text-green-800" : room.TinhTrang == "Bảo trì" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800") px-3 py-1 rounded-full text-sm font-medium">
+                                    @room.TinhTrang
+                                </span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <a href="@Url.Action("EditRoom", "Admin", new { id = room.ID_PhongTap })" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition-colors">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button onclick="deleteRoom(@room.ID_PhongTap)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded transition-colors">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Room Details -->
+                        <div class="space-y-3 text-gray-300">
+                            <div class="flex items-center">
+                                <i class="fas fa-map-marker-alt w-5 text-orange-500"></i>
+                                <span class="ml-2 text-sm">@room.DiaChi</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-users w-5 text-orange-500"></i>
+                                <span class="ml-2 text-sm">Sức chứa: @room.SucChua người</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar-check w-5 text-blue-500"></i>
+                                <span class="ml-2 text-sm">Slot: @room.SlotConLai/@room.SlotToiDa</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-dumbbell w-5 text-purple-500"></i>
+                                <span class="ml-2 text-sm">Thiết bị: @room.ThietBis.Count() thiết bị</span>
+                            </div>
+                            @if (room.TrainerPhuTrach != null)
+                            {
+                                <div class="flex items-center">
+                                    <i class="fas fa-user-tie w-5 text-green-500"></i>
+                                    <span class="ml-2 text-sm">Trainer: @room.TrainerPhuTrach.HoTen</span>
+                                </div>
+                            }
+                            <div class="flex items-center">
+                                <i class="fas fa-user-cog w-5 text-orange-500"></i>
+                                <span class="ml-2 text-sm">Quản lý: @(room.User?.HoTen ?? "Chưa phân công")</span>
+                            </div>
+                        </div>
+
+                        <!-- Room Actions -->
+                        <div class="mt-6 pt-4 border-t border-gray-700">
+                            <div class="flex justify-between">
+                                <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded text-sm transition-colors">
+                                    <i class="fas fa-eye mr-1"></i>Chi Tiết
+                                </button>
+                                <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm transition-colors">
+                                    <i class="fas fa-cog mr-1"></i>Thiết Bị
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-span-full">
+                <div class="bg-gray-800 rounded-lg shadow-xl border border-gray-700 p-12 text-center">
+                    <i class="fas fa-building text-6xl text-gray-600 mb-4"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Chưa có phòng tập nào</h3>
+                    <p class="text-gray-400 mb-6">Thêm phòng tập đầu tiên để bắt đầu quản lý</p>
+                    <a href="@Url.Action("CreateRoom", "Admin")" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block">
+                        <i class="fas fa-plus mr-2"></i>Thêm Phòng Tập
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function deleteRoom(roomId) {
+        if (confirm('Bạn có chắc chắn muốn xóa phòng tập này?\n\nLưu ý: Các thiết bị trong phòng sẽ được chuyển về trạng thái khả dụng và phòng không thể xóa nếu có lịch tập đang hoạt động.')) {
+            // Create a form to submit the delete request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("DeleteRoom", "Admin")';
+            
+            // Add anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token.value;
+                form.appendChild(tokenInput);
+            }
+            
+            // Add room ID
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'id';
+            idInput.value = roomId;
+            form.appendChild(idInput);
+            
+            // Submit form
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script> 

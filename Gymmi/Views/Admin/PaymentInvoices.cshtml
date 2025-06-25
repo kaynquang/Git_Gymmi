@@ -1,0 +1,305 @@
+@model List<Gymmi.Models.HoaDon_ThanhToan>
+
+@{
+    ViewData["Title"] = "Quản Lý Hóa Đơn Thanh Toán";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+                    <i class="fas fa-file-invoice-dollar mr-3"></i>Quản Lý Hóa Đơn Thanh Toán
+                </h1>
+                <p class="text-gray-300 mt-2">Theo dõi và quản lý các giao dịch thanh toán</p>
+            </div>
+            <div class="flex gap-3">
+                <button class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-plus mr-2"></i>Tạo Hóa Đơn
+                </button>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-file-export mr-2"></i>Xuất Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="bg-green-600 text-white p-4 rounded-lg mb-6">
+                <i class="fas fa-check-circle mr-2"></i>@TempData["Success"]
+            </div>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-6">
+                <i class="fas fa-exclamation-circle mr-2"></i>@ViewBag.Error
+            </div>
+        }
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-gradient-to-br from-green-600 to-green-700 rounded-2xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100 text-sm font-medium">Tổng Doanh Thu</p>
+                        <p class="text-2xl font-bold">@Model.Sum(h => h.SoTien).ToString("N0") VNĐ</p>
+                    </div>
+                    <div class="bg-green-500 bg-opacity-30 rounded-lg p-3">
+                        <i class="fas fa-coins text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm font-medium">Số Hóa Đơn</p>
+                        <p class="text-2xl font-bold">@Model.Count</p>
+                    </div>
+                    <div class="bg-blue-500 bg-opacity-30 rounded-lg p-3">
+                        <i class="fas fa-file-invoice text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm font-medium">Hóa Đơn Hôm Nay</p>
+                        <p class="text-2xl font-bold">@Model.Count(h => h.NgayThanhToan.Date == DateTime.Today)</p>
+                    </div>
+                    <div class="bg-purple-500 bg-opacity-30 rounded-lg p-3">
+                        <i class="fas fa-calendar-day text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-yellow-600 to-yellow-700 rounded-2xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-yellow-100 text-sm font-medium">Trung Bình/Hóa Đơn</p>
+                        <p class="text-2xl font-bold">@(Model.Any() ? (Model.Sum(h => h.SoTien) / Model.Count).ToString("N0") : "0") VNĐ</p>
+                    </div>
+                    <div class="bg-yellow-500 bg-opacity-30 rounded-lg p-3">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-gray-800 rounded-2xl p-6 mb-8 border border-gray-700">
+            <h3 class="text-lg font-semibold text-orange-300 mb-4">
+                <i class="fas fa-filter mr-2"></i>Bộ Lọc
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Từ ngày</label>
+                    <input type="date" 
+                           class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Đến ngày</label>
+                    <input type="date" 
+                           class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Phương thức</label>
+                    <select class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <option value="">Tất cả</option>
+                        <option value="cash">Tiền mặt</option>
+                        <option value="card">Thẻ</option>
+                        <option value="transfer">Chuyển khoản</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button class="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-all duration-300">
+                        <i class="fas fa-search mr-2"></i>Lọc
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Invoices Table -->
+        <div class="bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
+            <div class="px-6 py-4 bg-gradient-to-r from-orange-600 to-orange-700">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-list mr-2"></i>Danh Sách Hóa Đơn Thanh Toán
+                </h2>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-700">
+                            <tr class="text-left text-gray-300 text-sm font-semibold">
+                                <th class="px-6 py-4">Mã HĐ</th>
+                                <th class="px-6 py-4">Hội Viên</th>
+                                <th class="px-6 py-4">Gói Tập</th>
+                                <th class="px-6 py-4">Số Tiền</th>
+                                <th class="px-6 py-4">Ngày Thanh Toán</th>
+                                <th class="px-6 py-4">Phương Thức</th>
+                                <th class="px-6 py-4">Trạng Thái</th>
+                                <th class="px-6 py-4">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700">
+                            @foreach (var invoice in Model)
+                            {
+                                <tr class="hover:bg-gray-700 transition-colors duration-200">
+                                    <td class="px-6 py-4">
+                                        <span class="font-mono text-orange-300">#@invoice.ID_HoaDon</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mr-3">
+                                                <i class="fas fa-user text-white text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-white font-medium">@(invoice.TheHoiVien?.HoiVien?.User?.HoTen ?? "N/A")</p>
+                                                <p class="text-gray-400 text-sm">ID: @invoice.ID_TheHoiVien</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-white font-medium">@(invoice.GoiTap?.TenGoiTap ?? "N/A")</p>
+                                            <p class="text-gray-400 text-sm">@(invoice.GoiTap?.ThoiHan ?? 0) ngày</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-green-400 font-bold text-lg">@invoice.SoTien.ToString("N0") VNĐ</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-white">@invoice.NgayThanhToan.ToString("dd/MM/yyyy")</p>
+                                            <p class="text-gray-400 text-sm">@invoice.NgayThanhToan.ToString("HH:mm")</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-600 text-blue-100">
+                                            Tiền mặt
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-600 text-green-100">
+                                            <i class="fas fa-check mr-1"></i>Đã thanh toán
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex space-x-2">
+                                            <button class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-all duration-300" 
+                                                    title="Xem chi tiết">
+                                                <i class="fas fa-eye text-xs"></i>
+                                            </button>
+                                            <button class="bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg transition-all duration-300" 
+                                                    title="In hóa đơn">
+                                                <i class="fas fa-print text-xs"></i>
+                                            </button>
+                                            <button class="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition-all duration-300" 
+                                                    title="Gửi email">
+                                                <i class="fas fa-envelope text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-16">
+                    <div class="text-gray-400 mb-4">
+                        <i class="fas fa-file-invoice text-6xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-300 mb-2">Chưa có hóa đơn nào</h3>
+                    <p class="text-gray-500">Khi có giao dịch thanh toán, chúng sẽ xuất hiện ở đây</p>
+                </div>
+            }
+        </div>
+
+        <!-- Payment Analysis -->
+        <div class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <h3 class="text-xl font-semibold text-orange-300 mb-6">
+                <i class="fas fa-chart-bar mr-2"></i>Phân Tích Thanh Toán
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-300 mb-4">Doanh Thu Theo Tháng</h4>
+                    <div class="bg-gray-700 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <p class="text-gray-400">Biểu đồ doanh thu sẽ được hiển thị ở đây</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-300 mb-4">Phương Thức Thanh Toán</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-green-500 rounded mr-3"></div>
+                                <span class="text-gray-300">Tiền mặt</span>
+                            </div>
+                            <span class="text-white font-semibold">45%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-blue-500 rounded mr-3"></div>
+                                <span class="text-gray-300">Thẻ ngân hàng</span>
+                            </div>
+                            <span class="text-white font-semibold">35%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-purple-500 rounded mr-3"></div>
+                                <span class="text-gray-300">Chuyển khoản</span>
+                            </div>
+                            <span class="text-white font-semibold">20%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Management Tips -->
+        <div class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <h3 class="text-xl font-semibold text-orange-300 mb-4">
+                <i class="fas fa-lightbulb mr-2"></i>Hướng dẫn quản lý hóa đơn:
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-300">
+                <div>
+                    <h4 class="font-semibold text-orange-200 mb-2">Tạo hóa đơn:</h4>
+                    <ul class="space-y-1">
+                        <li>• Kiểm tra thông tin hội viên</li>
+                        <li>• Xác nhận gói tập đăng ký</li>
+                        <li>• Chọn phương thức thanh toán</li>
+                        <li>• In hóa đơn cho khách hàng</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-orange-200 mb-2">Theo dõi doanh thu:</h4>
+                    <ul class="space-y-1">
+                        <li>• Báo cáo theo ngày/tháng</li>
+                        <li>• Phân tích xu hướng thanh toán</li>
+                        <li>• So sánh với kỳ trước</li>
+                        <li>• Xuất báo cáo Excel</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-orange-200 mb-2">Xử lý vấn đề:</h4>
+                    <ul class="space-y-1">
+                        <li>• Hoàn tiền nếu cần thiết</li>
+                        <li>• Xử lý khiếu nại</li>
+                        <li>• Cập nhật thông tin sai</li>
+                        <li>• Liên hệ với khách hàng</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

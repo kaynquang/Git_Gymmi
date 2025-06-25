@@ -1,0 +1,106 @@
+@model Gymmi.Models.GoiTap
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Gói Tập";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
+                    <i class="fas fa-edit mr-3"></i>Chỉnh Sửa Gói Tập
+                </h1>
+                <p class="text-gray-300 mt-2">Cập nhật thông tin gói tập trong hệ thống</p>
+            </div>
+            <a asp-action="Packages" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Quay Lại
+            </a>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-gray-800 rounded-xl shadow-xl border border-gray-700 p-8">
+            <form asp-action="EditPackage" method="post" class="space-y-6">
+                <input type="hidden" asp-for="ID_GoiTap" />
+                
+                <!-- Tên Gói -->
+                <div class="space-y-2">
+                    <label asp-for="TenGoi" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-tag mr-2"></i>Tên Gói Tập
+                    </label>
+                    <input asp-for="TenGoi" type="text" 
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập tên gói tập" required>
+                    <span asp-validation-for="TenGoi" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Giá Tiền -->
+                <div class="space-y-2">
+                    <label asp-for="GiaTien" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-dollar-sign mr-2"></i>Giá Tiền (VNĐ)
+                    </label>
+                    <input asp-for="GiaTien" type="number" step="1000" min="0"
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập giá tiền" required>
+                    <span asp-validation-for="GiaTien" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Thời Hạn -->
+                <div class="space-y-2">
+                    <label asp-for="ThoiHan" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-calendar-alt mr-2"></i>Thời Hạn (Ngày)
+                    </label>
+                    <input asp-for="ThoiHan" type="number" min="1" max="365"
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập thời hạn (ngày)" required>
+                    <span asp-validation-for="ThoiHan" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Loại Gói Tập -->
+                <div class="space-y-2">
+                    <label asp-for="LoaiGoiTap" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-list mr-2"></i>Loại Gói Tập
+                    </label>
+                    <select asp-for="LoaiGoiTap" 
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300">
+                        <option value="">Chọn loại gói tập</option>
+                        <option value="Thường">Thường</option>
+                        <option value="VIP">VIP</option>
+                        <option value="Premium">Premium</option>
+                        <option value="Student">Student</option>
+                    </select>
+                    <span asp-validation-for="LoaiGoiTap" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Mô Tả -->
+                <div class="space-y-2">
+                    <label asp-for="MoTa" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-align-left mr-2"></i>Mô Tả
+                    </label>
+                    <textarea asp-for="MoTa" rows="4"
+                              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 resize-none"
+                              placeholder="Nhập mô tả chi tiết về gói tập"></textarea>
+                    <span asp-validation-for="MoTa" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-4 pt-6">
+                    <button type="submit" 
+                            class="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                        <i class="fas fa-save mr-2"></i>Cập Nhật Gói Tập
+                    </button>
+                    <a asp-action="Packages" 
+                       class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 text-center">
+                        <i class="fas fa-times mr-2"></i>Hủy Bỏ
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

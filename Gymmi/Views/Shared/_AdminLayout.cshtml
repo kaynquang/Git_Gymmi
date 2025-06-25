@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Gymmi Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .dark-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .dark-scrollbar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        
+        .dark-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        
+        .dark-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        
+        .nav-item:hover {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            transform: translateX(5px);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 font-sans">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="bg-gradient-to-b from-gray-800 to-gray-900 w-64 min-h-screen shadow-xl sidebar-transition dark-scrollbar overflow-y-auto">
+            <div class="p-6">
+                <!-- Logo -->
+                <div class="flex items-center mb-8">
+                    <i class="fas fa-dumbbell text-3xl text-orange-500 mr-3"></i>
+                    <h1 class="text-2xl font-bold text-white">Gymmi Admin</h1>
+                </div>
+                
+                <!-- Navigation Menu -->
+                <ul class="space-y-2">
+                    <li>
+                        <a href="@Url.Action("Index", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-tachometer-alt w-6"></i>
+                            <span class="ml-3">Dashboard</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("Users", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-users w-6"></i>
+                            <span class="ml-3">Quản Lý Người Dùng</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("Members", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-id-card w-6"></i>
+                            <span class="ml-3">Quản Lý Hội Viên</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("Rooms", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-building w-6"></i>
+                            <span class="ml-3">Quản Lý Phòng Tập</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("Equipment", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-dumbbell w-6"></i>
+                            <span class="ml-3">Quản Lý Thiết Bị</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("Packages", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-box w-6"></i>
+                            <span class="ml-3">Quản Lý Gói Tập</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("WorkAssignments", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-tasks w-6"></i>
+                            <span class="ml-3">Phân Công Công Việc</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("PaymentInvoices", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-receipt w-6"></i>
+                            <span class="ml-3">Hóa Đơn Thanh Toán</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("DisposalInvoices", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-trash-alt w-6"></i>
+                            <span class="ml-3">Hóa Đơn Thanh Lý</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("Reports", "Admin")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-chart-bar w-6"></i>
+                            <span class="ml-3">Báo Cáo</span>
+                        </a>
+                    </li>
+                    
+                    <li class="border-t border-gray-700 pt-4 mt-4">
+                        <a href="@Url.Action("Index", "Home")" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-home w-6"></i>
+                            <span class="ml-3">Về Trang Chủ</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="#" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                            <i class="fas fa-sign-out-alt w-6"></i>
+                            <span class="ml-3">Đăng Xuất</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto dark-scrollbar">
+            <!-- Top Navigation -->
+            <header class="bg-gray-800 shadow-lg border-b border-gray-700">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <button id="sidebarToggle" class="text-gray-400 hover:text-white lg:hidden">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="text-gray-300">
+                            <span class="text-sm">Xin chào, Admin</span>
+                        </div>
+                        <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-white text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <div class="min-h-screen">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Sidebar toggle for mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Auto-hide sidebar on mobile when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            
+            if (window.innerWidth < 1024) {
+                if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            }
+        });
+
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.remove('-translate-x-full');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+
+        // Initialize responsive sidebar
+        if (window.innerWidth < 1024) {
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> 

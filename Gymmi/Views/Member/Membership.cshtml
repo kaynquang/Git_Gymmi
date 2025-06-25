@@ -1,0 +1,104 @@
+@model List<TheHoiVien>
+@{
+    ViewData["Title"] = "Thẻ Hội Viên";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<!-- Page Header -->
+<div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-white mb-2">
+                <i class="fas fa-id-card mr-3 text-purple-400"></i>
+                Thẻ Hội Viên
+            </h1>
+            <p class="text-gray-400">Xem thông tin và lịch sử thẻ hội viên của bạn</p>
+        </div>
+        <div class="hidden md:block">
+            <i class="fas fa-id-card text-6xl text-purple-200 opacity-30"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Error Message -->
+@if (ViewBag.Error != null)
+{
+    <div class="bg-red-500 bg-opacity-10 border border-red-500 text-red-400 px-6 py-4 rounded-lg mb-6">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-3"></i>
+            <span>@ViewBag.Error</span>
+        </div>
+    </div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <!-- Membership History -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-white">
+                <i class="fas fa-history mr-3 text-blue-400"></i>
+                Lịch Sử Thẻ Hội Viên
+            </h2>
+            <span class="text-gray-400">@Model.Count thẻ</span>
+        </div>
+
+        <div class="space-y-4">
+            @foreach (var membership in Model)
+            {
+                <div class="bg-gray-700 rounded-lg p-6 hover:bg-gray-600 transition-colors">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mr-4 bg-green-500">
+                                <i class="fas fa-id-card text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">@membership.GoiTap?.TenGoi</h3>
+                                <p class="text-gray-400 text-sm">@membership.LoaiTheHoiVien</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-green-500 text-white">
+                                @membership.TrangThai
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-400">Ngày Bắt Đầu</p>
+                            <p class="text-white font-semibold">@membership.NgayBatDau.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">Ngày Hết Hạn</p>
+                            <p class="text-white font-semibold">@membership.NgayHetHan.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">Thời Hạn</p>
+                            <p class="text-white font-semibold">@membership.GoiTap?.ThoiHan tháng</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">Giá</p>
+                            <p class="text-white font-semibold">@membership.GoiTap?.GiaTien.ToString("N0") VND</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <!-- No Memberships -->
+    <div class="bg-gray-800 rounded-xl p-12 shadow-xl border border-gray-700 text-center">
+        <i class="fas fa-id-card text-6xl text-gray-500 mb-6"></i>
+        <h2 class="text-2xl font-bold text-white mb-4">Chưa Có Thẻ Hội Viên</h2>
+        <p class="text-gray-400 mb-8">Bạn chưa có thẻ hội viên nào. Hãy mua gói tập để bắt đầu hành trình fitness của bạn!</p>
+        
+        <a href="@Url.Action("Packages", "Member")" 
+           class="inline-flex items-center bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+            <i class="fas fa-shopping-cart mr-2"></i>
+            Xem Gói Tập
+        </a>
+    </div>
+}

@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Gymmi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                        secondary: '#1a1a1a',
+                        accent: '#FF8C42',
+                        dark: '#0d0d0d',
+                        'dark-gray': '#2a2a2a'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark text-white">
+    <!-- Top Navigation (Desktop) -->
+    <nav class="bg-black bg-opacity-80 fixed w-full z-50 top-0 backdrop-blur-sm hidden md:block">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="flex items-center">
+                        <span class="text-2xl font-bold text-primary">Gymmi</span>
+                        <i class="fas fa-dumbbell text-primary ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    @if (Context.Session.GetInt32("UserId") != null)
+                    {
+                        <!-- Authenticated User Menu -->
+                        var userName = Context.Session.GetString("UserName");
+                        var roleId = Context.Session.GetInt32("RoleId");
+                        var roleName = Context.Session.GetString("RoleName");
+                        
+                        <span class="text-gray-300 text-sm">
+                            Xin chào, <span class="text-primary font-semibold">@userName</span> 
+                            <span class="text-gray-500">(@roleName)</span>
+                        </span>
+                        
+                        @if (roleId == 1 || roleId == 2 || roleId == 4) // Admin, Staff, Trainer
+                        {
+                            <a asp-controller="Admin" asp-action="Index" class="text-white hover:text-primary transition duration-300 font-medium">Quản Trị</a>
+                        }
+                        
+                        @if (roleId == 3) // Member
+                        {
+                            <a asp-controller="Member" asp-action="Dashboard" class="text-white hover:text-primary transition duration-300 font-medium">Trang Hội Viên</a>
+                        }
+                        
+                        <form asp-controller="Home" asp-action="Logout" method="post" class="inline">
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition duration-300 font-medium">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Đăng Xuất
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <!-- Non-authenticated User Menu -->
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="text-white hover:text-primary transition duration-300 font-medium">Trang Chủ</a>
+                        <a href="#services" class="text-white hover:text-primary transition duration-300 font-medium">Dịch Vụ</a>
+                        <a href="#about" class="text-white hover:text-primary transition duration-300 font-medium">Giới Thiệu</a>
+                        <a href="#contact" class="text-white hover:text-primary transition duration-300 font-medium">Liên Hệ</a>
+                        <a asp-controller="Home" asp-action="Login" class="bg-primary text-white px-6 py-2 rounded hover:bg-accent transition duration-300 font-medium">
+                            <i class="fas fa-sign-in-alt mr-2"></i>
+                            Đăng Nhập
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Navigation Bar (Mobile/Tablet) -->
+    <div class="floating-nav-container md:hidden">
+        <div class="button-container">
+            <button class="button" onclick="scrollToTop()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024" stroke-width="0" fill="currentColor" stroke="currentColor" class="icon">
+                    <path d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z"></path>
+                </svg>
+            </button>
+            @if (Context.Session.GetInt32("UserId") != null)
+            {
+                var roleId = Context.Session.GetInt32("RoleId");
+                @if (roleId == 3) // Member
+                {
+                    <button class="button" onclick="window.location.href='@Url.Action("Dashboard", "Member")'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="0" fill="currentColor" stroke="currentColor" class="icon">
+                            <path d="M12 2.5a5.5 5.5 0 0 1 3.096 10.047 9.005 9.005 0 0 1 5.9 8.181.75.75 0 1 1-1.499.044 7.5 7.5 0 0 0-14.993 0 .75.75 0 0 1-1.5-.045 9.005 9.005 0 0 1 5.9-8.18A5.5 5.5 0 0 1 12 2.5ZM8 8a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"></path>
+                        </svg>
+                    </button>
+                }
+                else
+                {
+                    <button class="button" onclick="window.location.href='@Url.Action("Index", "Admin")'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"></path>
+                        </svg>
+                    </button>
+                }
+            }
+            else
+            {
+                <button class="button" onclick="document.getElementById('mobile-search').classList.toggle('hidden')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" aria-hidden="true" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linejoin="round" stroke-linecap="round"></path>
+                    </svg>
+                </button>
+            }
+            <button class="button" onclick="scrollToSection('#about')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="0" fill="currentColor" stroke="currentColor" class="icon">
+                    <path d="M12 2.5a5.5 5.5 0 0 1 3.096 10.047 9.005 9.005 0 0 1 5.9 8.181.75.75 0 1 1-1.499.044 7.5 7.5 0 0 0-14.993 0 .75.75 0 0 1-1.5-.045 9.005 9.005 0 0 1 5.9-8.18A5.5 5.5 0 0 1 12 2.5ZM8 8a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"></path>
+                </svg>
+            </button>
+            <button class="button" onclick="scrollToSection('#contact')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <div class="bg-dark-gray rounded-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-white text-lg font-semibold">Menu</h3>
+                    <button onclick="document.getElementById('mobile-search').classList.add('hidden')" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                @if (Context.Session.GetInt32("UserId") != null)
+                {
+                    var userName = Context.Session.GetString("UserName");
+                    var roleId = Context.Session.GetInt32("RoleId");
+                    var roleName = Context.Session.GetString("RoleName");
+                    
+                    <div class="mb-4 p-3 bg-gray-700 rounded">
+                        <p class="text-white font-semibold">@userName</p>
+                        <p class="text-gray-400 text-sm">@roleName</p>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        @if (roleId == 1 || roleId == 2 || roleId == 4)
+                        {
+                            <a asp-controller="Admin" asp-action="Index" class="block text-gray-300 hover:text-primary transition duration-300 py-2">Quản Trị</a>
+                        }
+                        @if (roleId == 3)
+                        {
+                            <a asp-controller="Member" asp-action="Dashboard" class="block text-gray-300 hover:text-primary transition duration-300 py-2">Trang Hội Viên</a>
+                        }
+                        <form asp-controller="Home" asp-action="Logout" method="post" class="mt-4">
+                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded transition duration-300">
+                                Đăng Xuất
+                            </button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <div class="space-y-2">
+                        <a href="#services" class="block text-gray-300 hover:text-primary transition duration-300 py-2">Dịch Vụ</a>
+                        <a href="#about" class="block text-gray-300 hover:text-primary transition duration-300 py-2">Giới Thiệu</a>
+                        <a href="#contact" class="block text-gray-300 hover:text-primary transition duration-300 py-2">Liên Hệ</a>
+                        <a asp-controller="Home" asp-action="Login" class="block bg-primary hover:bg-accent text-white py-2 px-4 rounded transition duration-300 text-center mt-4">
+                            Đăng Nhập
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Company -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <span class="text-2xl font-bold text-primary">Gymmi</span>
+                        <i class="fas fa-dumbbell text-primary ml-2"></i>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Support Your Need To Much Fitness Goal</p>
+                </div>
+                
+                <!-- Company Links -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Company</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">About</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Services</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>(555) 123-4567</li>
+                        <li>info@gymmi.com</li>
+                    </ul>
+                </div>
+                
+                <!-- More -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">More</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Programs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Plans</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-gray-400 hover:text-primary transition duration-300">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Popular Tags -->
+            <div class="mt-8 pt-8 border-t border-gray-800">
+                <h4 class="text-white font-semibold mb-4">Popular Tags</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-sm">Fitness</span>
+                    <span class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-sm">Nutrition</span>
+                    <span class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-sm">Workout</span>
+                    <span class="bg-primary text-white px-3 py-1 rounded text-sm">Gym</span>
+                    <span class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-sm">Health</span>
+                    <span class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-sm">Sports</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+        // Floating navigation functions
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        function scrollToSection(selector) {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

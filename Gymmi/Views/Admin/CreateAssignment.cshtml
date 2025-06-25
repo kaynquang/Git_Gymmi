@@ -1,0 +1,163 @@
+@model Gymmi.Models.PhanCong
+@{
+    ViewData["Title"] = "Tạo Phân Công";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-red-600 to-red-500 p-6 shadow-lg">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    <i class="fas fa-tasks mr-3"></i>
+                    Tạo Phân Công Mới
+                </h1>
+                <p class="text-red-100 mt-2">Phân công nhân viên cho phòng tập và ca làm việc</p>
+            </div>
+            <a href="@Url.Action("WorkAssignments", "Admin")" class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Quay Lại
+            </a>
+        </div>
+    </div>
+
+    <!-- Error Messages -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="p-6">
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-4">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                @ViewBag.Error
+            </div>
+        </div>
+    }
+
+    <!-- Form -->
+    <div class="p-6">
+        <div class="max-w-2xl mx-auto">
+            <div class="bg-gray-800 rounded-lg shadow-xl p-8 border border-gray-700">
+                <form asp-action="CreateAssignment" method="post" class="space-y-6">
+                    <div asp-validation-summary="ModelOnly" class="text-red-400 text-sm"></div>
+                    
+                    <!-- Employee Selection -->
+                    <div>
+                        <label asp-for="ID_User" class="block text-sm font-medium text-gray-300 mb-2">
+                            Nhân Viên <span class="text-red-400">*</span>
+                        </label>
+                        <select asp-for="ID_User" 
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                            <option value="">Chọn nhân viên</option>
+                            @foreach (var user in ViewBag.Users as List<Gymmi.Models.User>)
+                            {
+                                <option value="@user.ID_User">@user.HoTen - @(user.Role?.TenRole ?? "Không xác định")</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ID_User" class="text-red-400 text-sm"></span>
+                    </div>
+
+                    <!-- Room Selection -->
+                    <div>
+                        <label asp-for="ID_PhongTap" class="block text-sm font-medium text-gray-300 mb-2">
+                            Phòng Tập <span class="text-red-400">*</span>
+                        </label>
+                        <select asp-for="ID_PhongTap" 
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                            <option value="">Chọn phòng tập</option>
+                            @foreach (var room in ViewBag.Rooms as List<Gymmi.Models.PhongTap> ?? new List<Gymmi.Models.PhongTap>())
+                            {
+                                <option value="@room.ID_PhongTap">@room.TenPhong - @room.DiaChi</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ID_PhongTap" class="text-red-400 text-sm"></span>
+                    </div>
+
+                    <!-- Shift Selection -->
+                    <div>
+                        <label asp-for="ID_Ca" class="block text-sm font-medium text-gray-300 mb-2">
+                            Ca Làm Việc <span class="text-red-400">*</span>
+                        </label>
+                        <select asp-for="ID_Ca" 
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                            <option value="">Chọn ca làm việc</option>
+                            @foreach (var shift in ViewBag.WorkShifts as List<Gymmi.Models.CaLamViec> ?? new List<Gymmi.Models.CaLamViec>())
+                            {
+                                <option value="@shift.ID_Ca">@shift.TenCa</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ID_Ca" class="text-red-400 text-sm"></span>
+                    </div>
+
+                    <!-- Assignment Description -->
+                    <div>
+                        <label asp-for="MoTa" class="block text-sm font-medium text-gray-300 mb-2">
+                            Mô Tả Công Việc
+                        </label>
+                        <textarea asp-for="MoTa" rows="4"
+                                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                  placeholder="Nhập mô tả chi tiết về công việc được phân công..."></textarea>
+                        <span asp-validation-for="MoTa" class="text-red-400 text-sm"></span>
+                    </div>
+
+                    <!-- Assignment Date -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">
+                            Ngày Phân Công
+                        </label>
+                        <input type="text" value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm")" readonly
+                               class="w-full px-4 py-3 bg-gray-600 border border-gray-600 rounded-lg text-gray-300">
+                        <p class="text-gray-400 text-sm mt-1">Ngày phân công sẽ được tự động ghi nhận</p>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex space-x-4 pt-6">
+                        <button type="submit" 
+                                class="flex-1 bg-gradient-to-r from-red-600 to-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-red-700 hover:to-red-600 transition-all duration-300">
+                            <i class="fas fa-save mr-2"></i>
+                            Tạo Phân Công
+                        </button>
+                        <a href="@Url.Action("WorkAssignments", "Admin")" 
+                           class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors text-center">
+                            <i class="fas fa-times mr-2"></i>
+                            Hủy
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assignment Guidelines -->
+<div class="p-6">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <h3 class="text-lg font-semibold text-white mb-4">
+                <i class="fas fa-info-circle text-blue-400 mr-2"></i>
+                Hướng Dẫn Phân Công
+            </h3>
+            <div class="space-y-3 text-gray-300 text-sm">
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                    <span>Chọn nhân viên phù hợp với kỹ năng và kinh nghiệm</span>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                    <span>Đảm bảo phòng tập chưa có người phụ trách trong ca này</span>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                    <span>Mô tả rõ ràng nhiệm vụ và trách nhiệm</span>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                    <span>Kiểm tra lịch làm việc để tránh xung đột</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

@@ -1,0 +1,262 @@
+@model List<PhanCong>
+@{
+    ViewData["Title"] = "Lịch Làm Việc";
+    Layout = "~/Views/Shared/_TrainerLayout.cshtml";
+}
+
+<!-- Page Header -->
+<div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-white mb-2">
+                <i class="fas fa-calendar-alt mr-3 text-orange-400"></i>
+                Lịch Làm Việc
+            </h1>
+            <p class="text-gray-400">Xem và quản lý lịch làm việc của bạn</p>
+        </div>
+        <div class="hidden md:block">
+            <i class="fas fa-clock text-6xl text-orange-200 opacity-30"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Error Message -->
+@if (ViewBag.Error != null)
+{
+    <div class="bg-red-500 bg-opacity-10 border border-red-500 text-red-400 px-6 py-4 rounded-lg mb-6">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-3"></i>
+            <span>@ViewBag.Error</span>
+        </div>
+    </div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <!-- Statistics Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">Tổng Ca Làm</p>
+                    <p class="text-2xl font-bold text-white">@Model.Count</p>
+                </div>
+                <div class="p-3 bg-orange-500 rounded-full">
+                    <i class="fas fa-calendar text-white text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">Đang Hoạt Động</p>
+                    <p class="text-2xl font-bold text-green-400">@Model.Count(m => m.TrangThai == "Đang hoạt động")</p>
+                </div>
+                <div class="p-3 bg-green-500 rounded-full">
+                    <i class="fas fa-check-circle text-white text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">Tuần Này</p>
+                    <p class="text-2xl font-bold text-blue-400">@Model.Count(m => m.NgayPhanCong >= DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek) && m.NgayPhanCong < DateTime.Today.AddDays(7 - (int)DateTime.Today.DayOfWeek))</p>
+                </div>
+                <div class="p-3 bg-blue-500 rounded-full">
+                    <i class="fas fa-calendar-week text-white text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">Hôm Nay</p>
+                    <p class="text-2xl font-bold text-purple-400">@Model.Count(m => m.NgayPhanCong.Date == DateTime.Today)</p>
+                </div>
+                <div class="p-3 bg-purple-500 rounded-full">
+                    <i class="fas fa-calendar-day text-white text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Timeline -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-white">
+                <i class="fas fa-list mr-3 text-orange-400"></i>
+                Chi Tiết Lịch Làm Việc
+            </h2>
+            <div class="flex space-x-2">
+                <button class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors" onclick="filterByStatus('all')">
+                    Tất cả
+                </button>
+                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors" onclick="filterByStatus('active')">
+                    Đang hoạt động
+                </button>
+                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" onclick="filterByStatus('upcoming')">
+                    Sắp tới
+                </button>
+            </div>
+        </div>
+
+        <div class="space-y-4" id="scheduleList">
+            @foreach (var assignment in Model.OrderBy(m => m.NgayPhanCong).ThenBy(m => m.CaLamViec.TenCa))
+            {
+                var isToday = assignment.NgayPhanCong.Date == DateTime.Today;
+                var isPast = assignment.NgayPhanCong.Date < DateTime.Today;
+                var isUpcoming = assignment.NgayPhanCong.Date > DateTime.Today;
+                var statusClass = assignment.TrangThai == "Đang hoạt động" ? "border-l-green-500" : 
+                                 assignment.TrangThai == "Hoàn thành" ? "border-l-blue-500" : "border-l-gray-500";
+                
+                <div class="schedule-item bg-gray-700 rounded-lg p-6 border-l-4 @statusClass hover:bg-gray-600 transition-colors" 
+                     data-status="@assignment.TrangThai.ToLower().Replace(" ", "")" 
+                     data-date="@assignment.NgayPhanCong.ToString("yyyy-MM-dd")">
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mr-4 
+                                @(isToday ? "bg-orange-500" : isUpcoming ? "bg-blue-500" : "bg-gray-500")">
+                                <i class="fas fa-@(isToday ? "star" : isUpcoming ? "clock" : "check") text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">@assignment.PhongTap?.TenPhong</h3>
+                                <p class="text-gray-400">@assignment.NgayPhanCong.ToString("dddd, dd/MM/yyyy")</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold
+                                @(assignment.TrangThai == "Đang hoạt động" ? "bg-green-500 text-white" : 
+                                  assignment.TrangThai == "Hoàn thành" ? "bg-blue-500 text-white" : "bg-gray-500 text-white")">
+                                @assignment.TrangThai
+                            </span>
+                            @if (isToday)
+                            {
+                                <p class="text-orange-400 text-sm mt-1 font-semibold">Hôm nay</p>
+                            }
+                            else if (isUpcoming)
+                            {
+                                <p class="text-blue-400 text-sm mt-1">
+                                    @{
+                                        var daysLeft = (assignment.NgayPhanCong.Date - DateTime.Today).Days;
+                                    }
+                                    @if (daysLeft == 1)
+                                    {
+                                        <span>Ngày mai</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Còn @daysLeft ngày</span>
+                                    }
+                                </p>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-gray-800 rounded-lg p-4">
+                            <p class="text-gray-400 text-sm">Ca Làm Việc</p>
+                            <p class="text-white font-semibold">@assignment.CaLamViec?.TenCa</p>
+                            <p class="text-orange-400 text-sm">@assignment.CaLamViec?.MoTa</p>
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-4">
+                            <p class="text-gray-400 text-sm">Phòng Tập</p>
+                            <p class="text-white font-semibold">@assignment.PhongTap?.TenPhong</p>
+                            <p class="text-gray-400 text-sm">@assignment.PhongTap?.DiaChi</p>
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-4">
+                            <p class="text-gray-400 text-sm">Phân Công Bởi</p>
+                            <p class="text-white font-semibold">@assignment.CreatedByAdmin?.HoTen</p>
+                            <p class="text-gray-400 text-sm">@assignment.NgayPhanCong.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(assignment.MoTa))
+                    {
+                        <div class="mt-4 p-4 bg-gray-800 rounded-lg">
+                            <p class="text-gray-400 text-sm">Ghi Chú:</p>
+                            <p class="text-white">@assignment.MoTa</p>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href="@Url.Action("Dashboard", "Trainer")" 
+           class="bg-gradient-to-r from-orange-600 to-red-600 rounded-xl p-6 text-white text-center hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-xl">
+            <i class="fas fa-tachometer-alt text-3xl mb-3"></i>
+            <h3 class="text-lg font-bold">Về Trang Chủ</h3>
+            <p class="text-sm text-orange-100">Quay về dashboard</p>
+        </a>
+        
+        <a href="@Url.Action("Profile", "Trainer")" 
+           class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white text-center hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl">
+            <i class="fas fa-user text-3xl mb-3"></i>
+            <h3 class="text-lg font-bold">Hồ Sơ</h3>
+            <p class="text-sm text-blue-100">Cập nhật thông tin</p>
+        </a>
+        
+        <a href="@Url.Action("Clients", "Trainer")" 
+           class="bg-gradient-to-r from-green-600 to-teal-600 rounded-xl p-6 text-white text-center hover:from-green-700 hover:to-teal-700 transition-all transform hover:scale-105 shadow-xl">
+            <i class="fas fa-users text-3xl mb-3"></i>
+            <h3 class="text-lg font-bold">Học Viên</h3>
+            <p class="text-sm text-green-100">Xem danh sách học viên</p>
+        </a>
+    </div>
+}
+else
+{
+    <!-- No Schedule -->
+    <div class="bg-gray-800 rounded-xl p-12 shadow-xl border border-gray-700 text-center">
+        <i class="fas fa-calendar-times text-6xl text-gray-500 mb-6"></i>
+        <h2 class="text-2xl font-bold text-white mb-4">Chưa Có Lịch Làm Việc</h2>
+        <p class="text-gray-400 mb-8">Hiện tại bạn chưa được phân công ca làm việc nào. Vui lòng liên hệ với quản lý để được hỗ trợ.</p>
+        
+        <a href="@Url.Action("Dashboard", "Trainer")" 
+           class="inline-flex items-center bg-gradient-to-r from-orange-600 to-red-600 text-white px-8 py-3 rounded-lg hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Về Trang Chủ
+        </a>
+    </div>
+}
+
+<script>
+function filterByStatus(status) {
+    const items = document.querySelectorAll('.schedule-item');
+    const today = new Date().toISOString().split('T')[0];
+    
+    items.forEach(item => {
+        const itemDate = item.dataset.date;
+        const itemStatus = item.dataset.status;
+        
+        switch(status) {
+            case 'all':
+                item.style.display = 'block';
+                break;
+            case 'active':
+                if (itemStatus === 'đanghoạtđộng') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+                break;
+            case 'upcoming':
+                if (itemDate > today) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+                break;
+            default:
+                item.style.display = 'block';
+        }
+    });
+}
+</script>

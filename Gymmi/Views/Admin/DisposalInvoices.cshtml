@@ -1,0 +1,315 @@
+@model List<Gymmi.Models.HoaDon_ThanhLy>
+
+@{
+    ViewData["Title"] = "Quản Lý Hóa Đơn Thanh Lý";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
+                    <i class="fas fa-file-invoice mr-3"></i>Quản Lý Hóa Đơn Thanh Lý
+                </h1>
+                <p class="text-gray-300 mt-2">Theo dõi và quản lý các hoạt động thanh lý thiết bị</p>
+            </div>
+            <div class="flex gap-3">
+                <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-plus mr-2"></i>Tạo Hóa Đơn Thanh Lý
+                </button>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-file-export mr-2"></i>Xuất Báo Cáo
+                </button>
+            </div>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="bg-green-600 text-white p-4 rounded-lg mb-6">
+                <i class="fas fa-check-circle mr-2"></i>@TempData["Success"]
+            </div>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-6">
+                <i class="fas fa-exclamation-circle mr-2"></i>@ViewBag.Error
+            </div>
+        }
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-gradient-to-br from-red-600 to-red-700 rounded-2xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-red-100 text-sm font-medium">Tổng Giá Trị Thanh Lý</p>
+                        <p class="text-2xl font-bold">@Model.Sum(h => h.SoTien).ToString("N0") VNĐ</p>
+                    </div>
+                    <div class="bg-red-500 bg-opacity-30 rounded-lg p-3">
+                        <i class="fas fa-coins text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-orange-600 to-orange-700 rounded-2xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-orange-100 text-sm font-medium">Số Thiết Bị Thanh Lý</p>
+                        <p class="text-2xl font-bold">@Model.Count</p>
+                    </div>
+                    <div class="bg-orange-500 bg-opacity-30 rounded-lg p-3">
+                        <i class="fas fa-tools text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm font-medium">Thanh Lý Tháng Này</p>
+                        <p class="text-2xl font-bold">@Model.Count(h => h.NgayThanhLy.Month == DateTime.Now.Month)</p>
+                    </div>
+                    <div class="bg-purple-500 bg-opacity-30 rounded-lg p-3">
+                        <i class="fas fa-calendar-month text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-yellow-600 to-yellow-700 rounded-2xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-yellow-100 text-sm font-medium">Giá Trung Bình</p>
+                        <p class="text-2xl font-bold">@(Model.Any() ? (Model.Sum(h => h.SoTien) / Model.Count).ToString("N0") : "0") VNĐ</p>
+                    </div>
+                    <div class="bg-yellow-500 bg-opacity-30 rounded-lg p-3">
+                        <i class="fas fa-chart-bar text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-gray-800 rounded-2xl p-6 mb-8 border border-gray-700">
+            <h3 class="text-lg font-semibold text-red-300 mb-4">
+                <i class="fas fa-filter mr-2"></i>Bộ Lọc Thanh Lý
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Từ ngày</label>
+                    <input type="date" 
+                           class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Đến ngày</label>
+                    <input type="date" 
+                           class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Lý do thanh lý</label>
+                    <select class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <option value="">Tất cả</option>
+                        <option value="damaged">Hỏng hóc</option>
+                        <option value="old">Cũ kỹ</option>
+                        <option value="upgrade">Nâng cấp</option>
+                        <option value="excess">Thừa</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300">
+                        <i class="fas fa-search mr-2"></i>Lọc
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disposal Invoices Table -->
+        <div class="bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
+            <div class="px-6 py-4 bg-gradient-to-r from-red-600 to-red-700">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-list mr-2"></i>Danh Sách Hóa Đơn Thanh Lý
+                </h2>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-700">
+                            <tr class="text-left text-gray-300 text-sm font-semibold">
+                                <th class="px-6 py-4">Mã HĐ</th>
+                                <th class="px-6 py-4">Thiết Bị</th>
+                                <th class="px-6 py-4">Ngày Thanh Lý</th>
+                                <th class="px-6 py-4">Lý Do</th>
+                                <th class="px-6 py-4">Giá Thanh Lý</th>
+                                <th class="px-6 py-4">Người Xử Lý</th>
+                                <th class="px-6 py-4">Trạng Thái</th>
+                                <th class="px-6 py-4">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700">
+                            @foreach (var invoice in Model)
+                            {
+                                <tr class="hover:bg-gray-700 transition-colors duration-200">
+                                    <td class="px-6 py-4">
+                                        <span class="font-mono text-red-300">#@invoice.ID_HoaDonThanhLy</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mr-3">
+                                                <i class="fas fa-dumbbell text-white text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-white font-medium">@(invoice.ThietBi?.TenThietBi ?? "N/A")</p>
+                                                <p class="text-gray-400 text-sm">@(invoice.ThietBi?.XuatXu ?? "N/A")</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-white">@invoice.NgayThanhLy.ToString("dd/MM/yyyy")</p>
+                                            <p class="text-gray-400 text-sm">@invoice.NgayThanhLy.ToString("HH:mm")</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-600 text-red-100">
+                                            Thanh lý
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-red-400 font-bold text-lg">@invoice.SoTien.ToString("N0") VNĐ</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <div class="w-6 h-6 bg-gradient-to-br from-gray-500 to-gray-600 rounded-full flex items-center justify-center mr-2">
+                                                <i class="fas fa-user text-white text-xs"></i>
+                                            </div>
+                                            <span class="text-gray-300 text-sm">@(invoice.User?.HoTen ?? "Admin")</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-600 text-green-100">
+                                            <i class="fas fa-check mr-1"></i>Đã thanh lý
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex space-x-2">
+                                            <button class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-all duration-300" 
+                                                    title="Xem chi tiết">
+                                                <i class="fas fa-eye text-xs"></i>
+                                            </button>
+                                            <button class="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition-all duration-300" 
+                                                    title="In biên bản">
+                                                <i class="fas fa-print text-xs"></i>
+                                            </button>
+                                            <button class="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded-lg transition-all duration-300" 
+                                                    title="Lưu trữ">
+                                                <i class="fas fa-archive text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-16">
+                    <div class="text-gray-400 mb-4">
+                        <i class="fas fa-file-invoice text-6xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-300 mb-2">Chưa có hóa đơn thanh lý nào</h3>
+                    <p class="text-gray-500">Khi có thiết bị được thanh lý, thông tin sẽ xuất hiện ở đây</p>
+                </div>
+            }
+        </div>
+
+        <!-- Disposal Analysis -->
+        <div class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <h3 class="text-xl font-semibold text-red-300 mb-6">
+                <i class="fas fa-chart-pie mr-2"></i>Phân Tích Thanh Lý
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-300 mb-4">Lý Do Thanh Lý</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-red-500 rounded mr-3"></div>
+                                <span class="text-gray-300">Hỏng hóc</span>
+                            </div>
+                            <span class="text-white font-semibold">40%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-yellow-500 rounded mr-3"></div>
+                                <span class="text-gray-300">Cũ kỹ</span>
+                            </div>
+                            <span class="text-white font-semibold">35%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-blue-500 rounded mr-3"></div>
+                                <span class="text-gray-300">Nâng cấp</span>
+                            </div>
+                            <span class="text-white font-semibold">20%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-green-500 rounded mr-3"></div>
+                                <span class="text-gray-300">Khác</span>
+                            </div>
+                            <span class="text-white font-semibold">5%</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-300 mb-4">Giá Trị Thu Hồi Theo Tháng</h4>
+                    <div class="bg-gray-700 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <p class="text-gray-400">Biểu đồ giá trị thu hồi sẽ được hiển thị ở đây</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disposal Management Tips -->
+        <div class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <h3 class="text-xl font-semibold text-red-300 mb-4">
+                <i class="fas fa-lightbulb mr-2"></i>Hướng dẫn quản lý thanh lý:
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-300">
+                <div>
+                    <h4 class="font-semibold text-red-200 mb-2">Quy trình thanh lý:</h4>
+                    <ul class="space-y-1">
+                        <li>• Kiểm tra tình trạng thiết bị</li>
+                        <li>• Đánh giá giá trị còn lại</li>
+                        <li>• Lập biên bản thanh lý</li>
+                        <li>• Tìm đơn vị thu mua</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-red-200 mb-2">Tiêu chí thanh lý:</h4>
+                    <ul class="space-y-1">
+                        <li>• Thiết bị hỏng không sửa được</li>
+                        <li>• Chi phí sửa chữa > 70% giá trị</li>
+                        <li>• Thiết bị lỗi thời</li>
+                        <li>• Không còn phù hợp nhu cầu</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-red-200 mb-2">Quản lý tài chính:</h4>
+                    <ul class="space-y-1">
+                        <li>• Ghi chép đầy đủ giá trị</li>
+                        <li>• Tính toán khấu hao</li>
+                        <li>• Báo cáo định kỳ</li>
+                        <li>• Lưu trữ hồ sơ thanh lý</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

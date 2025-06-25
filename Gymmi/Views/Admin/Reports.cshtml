@@ -1,0 +1,278 @@
+@model List<Gymmi.Models.BaoCao>
+@{
+    ViewData["Title"] = "Báo Cáo";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 p-6 shadow-lg">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    <i class="fas fa-chart-bar mr-3"></i>
+                    Báo Cáo & Thống Kê
+                </h1>
+                <p class="text-indigo-100 mt-2">Theo dõi hiệu suất và tình hình hoạt động phòng tập</p>
+            </div>
+            <button onclick="generateReport()" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors">
+                <i class="fas fa-file-export mr-2"></i>
+                Tạo Báo Cáo
+            </button>
+        </div>
+    </div>
+
+    <!-- Error/Success Messages -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="p-6">
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-4">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                @ViewBag.Error
+            </div>
+        </div>
+    }
+
+    <!-- Quick Stats Dashboard -->
+    <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- New Members This Month -->
+            <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-6 text-white shadow-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100">Hội viên mới tháng này</p>
+                        <p class="text-3xl font-bold" id="newMembersCount">0</p>
+                    </div>
+                    <i class="fas fa-user-plus text-4xl text-green-200"></i>
+                </div>
+            </div>
+
+            <!-- Revenue This Month -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-6 text-white shadow-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100">Doanh thu tháng này</p>
+                        <p class="text-2xl font-bold" id="monthlyRevenue">0 VND</p>
+                    </div>
+                    <i class="fas fa-chart-line text-4xl text-blue-200"></i>
+                </div>
+            </div>
+
+            <!-- Equipment Status -->
+            <div class="bg-gradient-to-r from-yellow-600 to-yellow-700 rounded-lg p-6 text-white shadow-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-yellow-100">Thiết bị hoạt động</p>
+                        <p class="text-3xl font-bold" id="workingEquipment">0</p>
+                    </div>
+                    <i class="fas fa-tools text-4xl text-yellow-200"></i>
+                </div>
+            </div>
+
+            <!-- Staff Assignments -->
+            <div class="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-6 text-white shadow-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100">Phân công hiện tại</p>
+                        <p class="text-3xl font-bold" id="activeAssignments">0</p>
+                    </div>
+                    <i class="fas fa-users-cog text-4xl text-purple-200"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Membership Growth Chart -->
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h3 class="text-xl font-semibold text-white mb-4">
+                    <i class="fas fa-chart-area text-green-400 mr-2"></i>
+                    Tăng Trưởng Hội Viên
+                </h3>
+                <div class="h-64 flex items-center justify-center text-gray-400">
+                    <div class="text-center">
+                        <i class="fas fa-chart-line text-6xl mb-4"></i>
+                        <p>Biểu đồ tăng trưởng hội viên</p>
+                        <p class="text-sm">(Sẽ được triển khai với Chart.js)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Chart -->
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h3 class="text-xl font-semibold text-white mb-4">
+                    <i class="fas fa-chart-bar text-blue-400 mr-2"></i>
+                    Doanh Thu Theo Tháng
+                </h3>
+                <div class="h-64 flex items-center justify-center text-gray-400">
+                    <div class="text-center">
+                        <i class="fas fa-chart-bar text-6xl mb-4"></i>
+                        <p>Biểu đồ doanh thu</p>
+                        <p class="text-sm">(Sẽ được triển khai với Chart.js)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Table -->
+        @if (Model.Any())
+        {
+            <div class="bg-gray-800 rounded-lg shadow-xl overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-700">
+                    <h3 class="text-lg font-semibold text-white">
+                        <i class="fas fa-file-alt mr-2"></i>
+                        Báo Cáo Được Tạo
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-900">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Tên Báo Cáo
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Loại
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Ngày Tạo
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Người Tạo
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Thao Tác
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gray-800 divide-y divide-gray-700">
+                            @foreach (var report in Model)
+                            {
+                                <tr class="hover:bg-gray-750 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-white">@report.TenBaoCao</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            @report.LoaiBaoCao
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-white">@report.NgayTao.ToString("dd/MM/yyyy")</div>
+                                        <div class="text-sm text-gray-400">@report.NgayTao.ToString("HH:mm")</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-white">@(report.User?.HoTen ?? "Hệ thống")</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <div class="flex space-x-2">
+                                            <button onclick="viewReport(@report.ID_BaoCao)" 
+                                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition-colors">
+                                                <i class="fas fa-eye mr-1"></i>Xem
+                                            </button>
+                                            <button onclick="downloadReport(@report.ID_BaoCao)" 
+                                                    class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs transition-colors">
+                                                <i class="fas fa-download mr-1"></i>Tải
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="bg-gray-800 rounded-lg p-8 text-center">
+                <i class="fas fa-chart-bar text-6xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-semibold text-white mb-2">Chưa có báo cáo nào</h3>
+                <p class="text-gray-400 mb-4">Bắt đầu bằng cách tạo báo cáo đầu tiên</p>
+                <button onclick="generateReport()" class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tạo Báo Cáo
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Report Generation Modal -->
+<div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4 border border-gray-700">
+        <h3 class="text-xl font-semibold text-white mb-4">Tạo Báo Cáo Mới</h3>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Loại báo cáo</label>
+                <select id="reportType" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                    <option value="membership">Báo cáo hội viên</option>
+                    <option value="revenue">Báo cáo doanh thu</option>
+                    <option value="equipment">Báo cáo thiết bị</option>
+                    <option value="staff">Báo cáo nhân viên</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Thời gian</label>
+                <select id="reportPeriod" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                    <option value="week">Tuần này</option>
+                    <option value="month">Tháng này</option>
+                    <option value="quarter">Quý này</option>
+                    <option value="year">Năm này</option>
+                </select>
+            </div>
+            <div class="flex space-x-4 pt-4">
+                <button onclick="createReport()" class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors">
+                    Tạo
+                </button>
+                <button onclick="closeModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">
+                    Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load statistics on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadStatistics();
+});
+
+function loadStatistics() {
+    // Simulate loading statistics (replace with actual API calls)
+    document.getElementById('newMembersCount').textContent = '15';
+    document.getElementById('monthlyRevenue').textContent = '45,000,000 VND';
+    document.getElementById('workingEquipment').textContent = '28';
+    document.getElementById('activeAssignments').textContent = '12';
+}
+
+function generateReport() {
+    document.getElementById('reportModal').classList.remove('hidden');
+    document.getElementById('reportModal').classList.add('flex');
+}
+
+function closeModal() {
+    document.getElementById('reportModal').classList.add('hidden');
+    document.getElementById('reportModal').classList.remove('flex');
+}
+
+function createReport() {
+    const type = document.getElementById('reportType').value;
+    const period = document.getElementById('reportPeriod').value;
+    
+    // Here you would make an API call to generate the report
+    alert(`Đang tạo báo cáo ${type} cho ${period}...`);
+    closeModal();
+}
+
+function viewReport(id) {
+    // Open report in new window/modal
+    alert(`Xem báo cáo ID: ${id}`);
+}
+
+function downloadReport(id) {
+    // Download report file
+    alert(`Tải báo cáo ID: ${id}`);
+}
+</script> 

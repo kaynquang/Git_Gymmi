@@ -1,0 +1,365 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center bg-black">
+    <!-- Background Image Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10"></div>
+    
+    <!-- Hero Content -->
+    <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-screen">
+            <!-- Left Content -->
+            <div class="text-white space-y-6">
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight">
+                    Transform<br>
+                    <span class="text-primary">Your Body</span>
+                </h1>
+                <p class="text-xl text-gray-300 max-w-md">
+                    We are dedicated to helping you transform your 
+                    body and push through your personal limits
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a asp-controller="Home" asp-action="Login" class="bg-primary hover:bg-accent text-white px-8 py-3 rounded font-semibold transition duration-300 text-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Đăng Nhập
+                    </a>
+                    <button class="border border-white text-white hover:bg-white hover:text-black px-8 py-3 rounded font-semibold transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-play mr-2"></i>
+                        Xem Review
+                    </button>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="flex space-x-4 pt-8">
+                    <a href="#" class="w-10 h-10 bg-primary rounded flex items-center justify-center hover:bg-accent transition duration-300">
+                        <i class="fab fa-google text-white"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-blue-600 rounded flex items-center justify-center hover:bg-blue-700 transition duration-300">
+                        <i class="fab fa-facebook-f text-white"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-orange-500 rounded flex items-center justify-center hover:bg-orange-600 transition duration-300">
+                        <i class="fab fa-youtube text-white"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right Content - Hero Image -->
+            <div class="relative">
+                <div class="w-full h-96 lg:h-[600px] bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-dumbbell text-primary text-8xl opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Fitness Plans & Nutritions Section -->
+<section id="services" class="py-20 bg-secondary">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-white mb-4">
+                Fitness Plans & <span class="text-primary">Nutritions</span>
+            </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Weight Loss -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-weight text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Weight Loss</h3>
+                <p class="text-gray-400 text-sm">
+                    Weight loss not like the weight of fat reduces 
+                    overall body weight. It can happen intentionally 
+                    or unintentionally and regularly.
+                </p>
+            </div>
+            
+            <!-- Classic Yoga -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-leaf text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Classic Yoga</h3>
+                <p class="text-gray-400 text-sm">
+                    The Classic Yoga style originated from the old 
+                    school Ashtanga yoga which includes multiple yoga 
+                    hand to foot postures for health.
+                </p>
+            </div>
+            
+            <!-- Cycling -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-bicycle text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Cycling</h3>
+                <p class="text-gray-400 text-sm">
+                    Cycling is one of the best cardiovascular exercises.
+                    Cycling may help to reduce weight and may help
+                    provide strength to the lower body and legs.
+                </p>
+            </div>
+            
+            <!-- Body Building -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-dumbbell text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Body Building</h3>
+                <p class="text-gray-400 text-sm">
+                    Bodybuilding is great for gaining muscle mass and
+                    muscle quality. The training of muscle development
+                    with body strengthening activities and gym.
+                </p>
+            </div>
+            
+            <!-- Musculation -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-fist-raised text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Musculation</h3>
+                <p class="text-gray-400 text-sm">
+                    Musculation is quite like body building but it
+                    focuses more on developing muscles and muscle 
+                    quality. The training includes muscle oriented workouts.
+                </p>
+            </div>
+            
+            <!-- Fitness Running -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-running text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-4">Fitness Running</h3>
+                <p class="text-gray-400 text-sm">
+                    Running can be used as a weight loss approach to
+                    reduce weight and may help provide strength to
+                    overall body cardiovascular health.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Subscribe To Plans Section -->
+<section class="py-20 bg-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-white mb-4">
+                Subscribe To <span class="text-primary">Plans</span>
+            </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Basic Plan -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300">
+                <h3 class="text-2xl font-semibold text-white mb-2">Fit</h3>
+                <p class="text-gray-400 text-sm mb-4">Plan For: Only Gym</p>
+                <div class="text-4xl font-bold text-primary mb-2">₹1200 <span class="text-lg text-gray-400">/month</span></div>
+                <p class="text-gray-400 text-sm mb-8">Streaming</p>
+                <button onclick="selectPlan('Fit', '₹1200')" class="w-full border border-gray-600 text-white py-3 rounded hover:bg-primary hover:border-primary transition duration-300">
+                    Select Plan
+                </button>
+            </div>
+            
+            <!-- Premium Plan -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300 relative border-2 border-primary">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span class="bg-primary text-white px-4 py-1 rounded text-sm font-semibold">Recommended</span>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-2">Fit</h3>
+                <p class="text-gray-400 text-sm mb-4">Plan For: 16/11/2024</p>
+                <div class="text-4xl font-bold text-primary mb-2">₹1000 <span class="text-lg text-gray-400">/month</span></div>
+                <p class="text-gray-400 text-sm mb-8">Streaming</p>
+                <button onclick="selectPlan('Fit Premium', '₹1000')" class="w-full bg-primary text-white py-3 rounded hover:bg-accent transition duration-300">
+                    Select Plan
+                </button>
+            </div>
+            
+            <!-- Elite Plan -->
+            <div class="bg-dark-gray rounded-lg p-8 text-center hover:bg-gray-700 transition duration-300">
+                <h3 class="text-2xl font-semibold text-white mb-2">Fit</h3>
+                <p class="text-gray-400 text-sm mb-4">Plan For: 15/11/2024</p>
+                <div class="text-4xl font-bold text-primary mb-2">₹1500 <span class="text-lg text-gray-400">/month</span></div>
+                <p class="text-gray-400 text-sm mb-8">Streaming</p>
+                <button onclick="selectPlan('Fit Elite', '₹1500')" class="w-full border border-gray-600 text-white py-3 rounded hover:bg-primary hover:border-primary transition duration-300">
+                    Select Plan
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Join Our Trainer Section -->
+<section class="py-20 bg-secondary">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-16">
+            <h2 class="text-4xl font-bold text-white mb-4">
+                Join Our <span class="text-primary">Trainer</span>
+            </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Trainer 1 -->
+            <div class="group cursor-pointer">
+                <div class="relative overflow-hidden rounded-lg mb-4">
+                    <div class="w-full h-80 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <i class="fas fa-user text-primary text-6xl opacity-70"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <button class="bg-primary text-white px-6 py-2 rounded hover:bg-accent transition duration-300">
+                            View Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trainer 2 -->
+            <div class="group cursor-pointer">
+                <div class="relative overflow-hidden rounded-lg mb-4">
+                    <div class="w-full h-80 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <i class="fas fa-user text-primary text-6xl opacity-70"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <button class="bg-primary text-white px-6 py-2 rounded hover:bg-accent transition duration-300">
+                            View Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trainer 3 -->
+            <div class="group cursor-pointer">
+                <div class="relative overflow-hidden rounded-lg mb-4">
+                    <div class="w-full h-80 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <i class="fas fa-user text-primary text-6xl opacity-70"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <button class="bg-primary text-white px-6 py-2 rounded hover:bg-accent transition duration-300">
+                            View Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Join With Us Section -->
+<section id="about" class="py-20 bg-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Left Content -->
+            <div class="text-white">
+                <h2 class="text-4xl font-bold mb-8">
+                    Why Join With <span class="text-primary">Us?</span>
+                </h2>
+                <ul class="space-y-4">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-primary mr-4"></i>
+                        <span class="text-lg">Best Gym</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-primary mr-4"></i>
+                        <span class="text-lg">Experts Coach</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-primary mr-4"></i>
+                        <span class="text-lg">Good Workout Facilities</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-primary mr-4"></i>
+                        <span class="text-lg">Consultation With Experts</span>
+                    </li>
+                </ul>
+                <button class="mt-8 bg-primary hover:bg-accent text-white px-8 py-3 rounded font-semibold transition duration-300">
+                    See More Benefits
+                </button>
+            </div>
+            
+            <!-- Right Content - Images -->
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-dumbbell text-primary text-4xl opacity-70"></i>
+                    </div>
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-heartbeat text-primary text-4xl opacity-70"></i>
+                    </div>
+                </div>
+                <div class="w-full h-32 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-trophy text-primary text-4xl opacity-70"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-20 bg-secondary">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-white mb-4">Get In Touch</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">
+                Ready to start your fitness journey? Contact us today for a free consultation.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Contact Form -->
+            <div class="bg-dark-gray rounded-lg p-8">
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" placeholder="First Name" class="w-full px-4 py-3 bg-black text-white rounded border border-gray-600 focus:border-primary focus:outline-none">
+                        <input type="text" placeholder="Last Name" class="w-full px-4 py-3 bg-black text-white rounded border border-gray-600 focus:border-primary focus:outline-none">
+                    </div>
+                    <input type="email" placeholder="Email Address" class="w-full px-4 py-3 bg-black text-white rounded border border-gray-600 focus:border-primary focus:outline-none">
+                    <textarea rows="4" placeholder="Your Message" class="w-full px-4 py-3 bg-black text-white rounded border border-gray-600 focus:border-primary focus:outline-none resize-none"></textarea>
+                    <button type="submit" class="w-full bg-primary hover:bg-accent text-white py-3 rounded font-semibold transition duration-300">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="space-y-8">
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-primary rounded flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-phone text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold mb-2">Call Us</h4>
+                            <p class="text-gray-400">(555) 123-4567</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-primary rounded flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-envelope text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold mb-2">Email</h4>
+                            <p class="text-gray-400">info@gymmi.com</p>
+                        </div>
+</div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-primary rounded flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold mb-2">Location</h4>
+                            <p class="text-gray-400">123 Fitness Street<br>Health City, FC 12345</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

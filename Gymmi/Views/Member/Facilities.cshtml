@@ -1,0 +1,253 @@
+@model List<Gymmi.Models.PhongTap>
+@{
+    ViewData["Title"] = "Cơ Sở Vật Chất";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<!-- Header -->
+<div class="mb-8">
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-2xl">
+        <h1 class="text-4xl font-bold mb-2">
+            <i class="fas fa-building mr-3 text-indigo-300"></i>
+            Cơ Sở Vật Chất
+        </h1>
+        <p class="text-xl text-indigo-100">Khám phá các phòng tập và thiết bị hiện đại</p>
+    </div>
+</div>
+
+<!-- Error Message -->
+@if (ViewBag.Error != null)
+{
+    <div class="mb-6 bg-red-600 text-white p-4 rounded-lg shadow-lg">
+        <i class="fas fa-exclamation-triangle mr-2"></i>@ViewBag.Error
+    </div>
+}
+
+@if (Model?.Any() == true)
+{
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">Tổng Phòng Tập</p>
+                    <p class="text-2xl font-bold text-white">@Model.Count</p>
+                </div>
+                <div class="p-3 bg-blue-500 rounded-full">
+                    <i class="fas fa-door-open text-white text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">Tổng Sức Chứa</p>
+                    <p class="text-2xl font-bold text-green-400">@Model.Sum(r => r.SucChua)</p>
+                    <p class="text-xs text-gray-500">người</p>
+                </div>
+                <div class="p-3 bg-green-500 rounded-full">
+                    <i class="fas fa-users text-white text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm">Tổng Thiết Bị</p>
+                    <p class="text-2xl font-bold text-purple-400">@Model.Sum(r => r.ThietBis.Count)</p>
+                    <p class="text-xs text-gray-500">máy móc</p>
+                </div>
+                <div class="p-3 bg-purple-500 rounded-full">
+                    <i class="fas fa-dumbbell text-white text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gym Rooms -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        @foreach (var room in Model)
+        {
+            <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 hover-scale">
+                <!-- Room Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2">@room.TenPhong</h3>
+                        <p class="text-gray-400">@room.DiaChi</p>
+                        @if (!string.IsNullOrEmpty(room.ViTri))
+                        {
+                            <p class="text-gray-500 text-sm">Vị trí: @room.ViTri</p>
+                        }
+                    </div>
+                    <div class="text-right">
+                        <span class="bg-@(room.TinhTrang == "Hoạt động" ? "green" : "red")-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            @room.TinhTrang
+                        </span>
+                        <p class="text-gray-400 text-sm mt-2">Sức chứa: @room.SucChua người</p>
+                    </div>
+                </div>
+
+                <!-- Room Equipment -->
+                @if (room.ThietBis?.Any() == true)
+                {
+                    <div class="mb-6">
+                        <h4 class="text-white font-semibold mb-3">
+                            <i class="fas fa-tools mr-2 text-blue-400"></i>
+                            Thiết Bị (@room.ThietBis.Count máy)
+                        </h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            @foreach (var equipment in room.ThietBis.Take(8))
+                            {
+                                <div class="bg-gray-700 rounded-lg p-3 border-l-4 @(equipment.TinhTrang == "Hoạt động" ? "border-green-500" : equipment.TinhTrang == "Bảo trì" ? "border-yellow-500" : "border-red-500")">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex-1">
+                                            <h5 class="font-semibold text-white text-sm">@equipment.TenThietBi</h5>
+                                            @if (!string.IsNullOrEmpty(equipment.XuatXu))
+                                            {
+                                                <p class="text-gray-400 text-xs">Xuất xứ: @equipment.XuatXu</p>
+                                            }
+                                            @if (equipment.NgayMua != default(DateTime))
+                                            {
+                                                <p class="text-gray-500 text-xs">Mua: @equipment.NgayMua.ToString("MM/yyyy")</p>
+                                            }
+                                        </div>
+                                        <div class="text-right ml-2">
+                                            <span class="@(equipment.TinhTrang == "Hoạt động" ? "text-green-400" : equipment.TinhTrang == "Bảo trì" ? "text-yellow-400" : "text-red-400") text-xs font-semibold">
+                                                @equipment.TinhTrang
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            
+                            @if (room.ThietBis.Count > 8)
+                            {
+                                <div class="bg-gray-700 rounded-lg p-3 border-l-4 border-gray-500 flex items-center justify-center">
+                                    <span class="text-gray-400 text-sm">+@(room.ThietBis.Count - 8) thiết bị khác</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="mb-6">
+                        <h4 class="text-white font-semibold mb-3">
+                            <i class="fas fa-tools mr-2 text-blue-400"></i>
+                            Thiết Bị
+                        </h4>
+                        <div class="text-center py-4 text-gray-400">
+                            <i class="fas fa-exclamation-circle text-2xl mb-2 opacity-50"></i>
+                            <p class="text-sm">Chưa có thông tin thiết bị</p>
+                        </div>
+                    </div>
+                }
+
+                <!-- Room Features -->
+                <div class="mb-6">
+                    <h4 class="text-white font-semibold mb-3">
+                        <i class="fas fa-star mr-2 text-yellow-400"></i>
+                        Đặc Điểm
+                    </h4>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-thermometer-half text-blue-400 mr-2 w-4"></i>
+                            <span>Điều hòa không khí</span>
+                        </div>
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-wifi text-green-400 mr-2 w-4"></i>
+                            <span>WiFi miễn phí</span>
+                        </div>
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-tint text-blue-400 mr-2 w-4"></i>
+                            <span>Nước uống miễn phí</span>
+                        </div>
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-volume-up text-purple-400 mr-2 w-4"></i>
+                            <span>Hệ thống âm thanh</span>
+                        </div>
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-video text-red-400 mr-2 w-4"></i>
+                            <span>Camera an ninh</span>
+                        </div>
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-first-aid text-green-400 mr-2 w-4"></i>
+                            <span>Hộp sơ cứu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Workout Button -->
+                <div class="pt-4 border-t border-gray-700">
+                    @if (room.TinhTrang == "Hoạt động")
+                    {
+                        <a href="@Url.Action("BookWorkout", "Member")" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 px-6 rounded-lg font-semibold text-center block transition-all">
+                            <i class="fas fa-calendar-plus mr-2"></i>
+                            Đặt Lịch Tập Tại Đây
+                        </a>
+                    }
+                    else
+                    {
+                        <button class="w-full bg-gray-600 text-gray-400 py-3 px-6 rounded-lg font-semibold cursor-not-allowed" disabled>
+                            <i class="fas fa-lock mr-2"></i>
+                            Phòng Tạm Đóng
+                        </button>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Facility Guidelines -->
+    <div class="mt-8 bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <h3 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-info-circle mr-2 text-blue-400"></i>
+            Quy Định Sử Dụng Cơ Sở
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
+            <div>
+                <h4 class="font-semibold text-white mb-2">
+                    <i class="fas fa-check-circle mr-2 text-green-400"></i>
+                    Được Phép:
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li>• Sử dụng thiết bị đúng cách và an toàn</li>
+                    <li>• Lau sạch thiết bị sau khi sử dụng</li>
+                    <li>• Mang theo khăn và nước uống riêng</li>
+                    <li>• Tập luyện trong khung giờ quy định</li>
+                    <li>• Yêu cầu hỗ trợ từ nhân viên khi cần</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-2">
+                    <i class="fas fa-times-circle mr-2 text-red-400"></i>
+                    Không Được Phép:
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li>• Để thiết bị bẩn sau khi sử dụng</li>
+                    <li>• Monopolize thiết bị quá lâu</li>
+                    <li>• Ăn uống trong khu vực tập luyện</li>
+                    <li>• Gây ồn ào, làm phiền người khác</li>
+                    <li>• Sử dụng thiết bị khi chưa hiểu cách dùng</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <!-- No Facilities Available -->
+    <div class="text-center py-16">
+        <i class="fas fa-building text-6xl text-gray-400 mb-6"></i>
+        <h2 class="text-2xl font-bold text-white mb-4">Hiện Tại Chưa Có Cơ Sở Nào</h2>
+        <p class="text-gray-400 mb-6">Thông tin về cơ sở vật chất sẽ được cập nhật sớm.</p>
+        <a href="@Url.Action("Dashboard", "Member")" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Về Trang Chủ
+        </a>
+    </div>
+} 

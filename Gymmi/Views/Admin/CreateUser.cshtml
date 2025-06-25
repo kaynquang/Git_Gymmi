@@ -1,0 +1,90 @@
+@model Gymmi.Models.User
+@{
+    ViewData["Title"] = "Thêm Người Dùng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-orange-600 to-orange-500 p-6 rounded-lg shadow-lg mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    <i class="fas fa-user-plus mr-3"></i>
+                    Thêm Người Dùng Mới
+                </h1>
+                <p class="text-orange-100 mt-2">Tạo tài khoản người dùng mới trong hệ thống</p>
+            </div>
+            <a href="@Url.Action("Users", "Admin")" class="bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>Quay Lại
+            </a>
+        </div>
+    </div>
+
+    <!-- Create User Form -->
+    <div class="bg-gray-800 rounded-lg shadow-xl border border-gray-700">
+        <div class="p-6">
+            <form asp-action="CreateUser" method="post">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Họ Tên -->
+                    <div>
+                        <label asp-for="HoTen" class="block text-gray-300 font-medium mb-2">Họ Tên *</label>
+                        <input asp-for="HoTen" type="text" class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500" required>
+                        <span asp-validation-for="HoTen" class="text-red-400 text-sm"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label asp-for="Email" class="block text-gray-300 font-medium mb-2">Email *</label>
+                        <input asp-for="Email" type="email" class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500" required>
+                        <span asp-validation-for="Email" class="text-red-400 text-sm"></span>
+                    </div>
+
+                    <!-- Số Điện Thoại -->
+                    <div>
+                        <label asp-for="Sdt" class="block text-gray-300 font-medium mb-2">Số Điện Thoại *</label>
+                        <input asp-for="Sdt" type="tel" class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500" required>
+                        <span asp-validation-for="Sdt" class="text-red-400 text-sm"></span>
+                    </div>
+
+                    <!-- Mật Khẩu -->
+                    <div>
+                        <label asp-for="Password" class="block text-gray-300 font-medium mb-2">Mật Khẩu *</label>
+                        <input asp-for="Password" type="password" class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500" required>
+                        <span asp-validation-for="Password" class="text-red-400 text-sm"></span>
+                    </div>
+
+                    <!-- Vai Trò -->
+                    <div class="md:col-span-2">
+                        <label asp-for="ID_Role" class="block text-gray-300 font-medium mb-2">Vai Trò *</label>
+                        <select asp-for="ID_Role" class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500" required>
+                            <option value="">-- Chọn vai trò --</option>
+                            @if (ViewBag.Roles != null)
+                            {
+                                @foreach (var role in (List<Gymmi.Models.Role>)ViewBag.Roles)
+                                {
+                                    <option value="@role.ID_Role">@role.TenRole</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="ID_Role" class="text-red-400 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end mt-8 space-x-4">
+                    <a href="@Url.Action("Users", "Admin")" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Hủy
+                    </a>
+                    <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        <i class="fas fa-save mr-2"></i>Tạo Người Dùng
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

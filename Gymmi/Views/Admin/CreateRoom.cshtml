@@ -1,0 +1,238 @@
+@model Gymmi.Models.PhongTap
+
+@{
+    ViewData["Title"] = "Tạo Phòng Tập Mới";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                    <i class="fas fa-plus-circle mr-3"></i>Tạo Phòng Tập Mới
+                </h1>
+                <p class="text-gray-300 mt-2">Thêm phòng tập mới vào hệ thống quản lý</p>
+            </div>
+            <a asp-action="Rooms" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-arrow-left mr-2"></i>Quay lại
+            </a>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="bg-green-600 text-white p-4 rounded-lg mb-6">
+                <i class="fas fa-check-circle mr-2"></i>@TempData["Success"]
+            </div>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-6">
+                <i class="fas fa-exclamation-circle mr-2"></i>@ViewBag.Error
+            </div>
+        }
+
+        <!-- Create Room Form -->
+        <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-700">
+            <form asp-action="CreateRoom" method="post" class="space-y-6">
+                <div asp-validation-summary="ModelOnly" class="text-red-400 mb-4"></div>
+
+                <!-- Room Name -->
+                <div class="space-y-2">
+                    <label asp-for="TenPhong" class="block text-sm font-semibold text-blue-300">
+                        <i class="fas fa-tag mr-2"></i>Tên Phòng Tập
+                    </label>
+                    <input asp-for="TenPhong" 
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập tên phòng tập (VD: Phòng Cardio, Phòng Yoga...)" 
+                           required />
+                    <span asp-validation-for="TenPhong" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Room Location -->
+                <div class="space-y-2">
+                    <label asp-for="ViTri" class="block text-sm font-semibold text-blue-300">
+                        <i class="fas fa-map-marker-alt mr-2"></i>Vị Trí
+                    </label>
+                    <input asp-for="ViTri" 
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập vị trí phòng (VD: Tầng 1, Tầng 2, Khu A...)" 
+                           required />
+                    <span asp-validation-for="ViTri" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Capacity -->
+                <div class="space-y-2">
+                    <label asp-for="SucChua" class="block text-sm font-semibold text-blue-300">
+                        <i class="fas fa-users mr-2"></i>Sức Chứa (Người)
+                    </label>
+                    <input asp-for="SucChua" 
+                           type="number" 
+                           min="1" 
+                           max="100"
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập sức chứa tối đa của phòng" 
+                           required />
+                    <span asp-validation-for="SucChua" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Max Slots -->
+                <div class="space-y-2">
+                    <label asp-for="SlotToiDa" class="block text-sm font-semibold text-blue-300">
+                        <i class="fas fa-calendar-check mr-2"></i>Slot Tối Đa Mỗi Khung Giờ
+                    </label>
+                    <input asp-for="SlotToiDa" 
+                           type="number" 
+                           min="1" 
+                           max="50"
+                           value="20"
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Số slot tối đa có thể đặt cho mỗi khung giờ" 
+                           required />
+                    <span asp-validation-for="SlotToiDa" class="text-red-400 text-sm"></span>
+                    <p class="text-xs text-gray-400">Số lượng thành viên tối đa có thể đặt lịch trong cùng 1 khung giờ</p>
+                </div>
+
+                <!-- Assigned Trainer -->
+                <div class="space-y-2">
+                    <label asp-for="ID_TrainerPhuTrach" class="block text-sm font-semibold text-blue-300">
+                        <i class="fas fa-user-tie mr-2"></i>Huấn Luyện Viên Phụ Trách (Tùy chọn)
+                    </label>
+                    <select asp-for="ID_TrainerPhuTrach" 
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                        <option value="">-- Chọn huấn luyện viên (tùy chọn) --</option>
+                        @if (ViewBag.Trainers != null)
+                        {
+                            @foreach (var trainer in ViewBag.Trainers as List<User>)
+                            {
+                                <option value="@trainer.ID_User">@trainer.HoTen</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="ID_TrainerPhuTrach" class="text-red-400 text-sm"></span>
+                    <p class="text-xs text-gray-400">Chọn huấn luyện viên chính phụ trách phòng này (có thể để trống)</p>
+                </div>
+
+                <!-- Equipment Selection -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-blue-300">
+                        <i class="fas fa-dumbbell mr-2"></i>Thiết Bị Sử Dụng *
+                    </label>
+                    <div class="bg-gray-700 border border-gray-600 rounded-lg p-4 max-h-60 overflow-y-auto">
+                        @if (ViewBag.AvailableEquipment != null && ((List<ThietBi>)ViewBag.AvailableEquipment).Any())
+                        {
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                @foreach (var equipment in ViewBag.AvailableEquipment as List<ThietBi>)
+                                {
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-600 rounded-lg hover:bg-gray-500 transition-colors">
+                                        <input type="checkbox" 
+                                               name="selectedEquipment" 
+                                               value="@equipment.ID_ThietBi" 
+                                               id="equipment_@equipment.ID_ThietBi"
+                                               class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2" />
+                                        <label for="equipment_@equipment.ID_ThietBi" class="flex-1 text-white text-sm cursor-pointer">
+                                            <div class="font-medium">@equipment.TenThietBi</div>
+                                            <div class="text-gray-300 text-xs">
+                                                Số lượng: @equipment.SoLuong | Tình trạng: @equipment.TinhTrang
+                                                @if (!string.IsNullOrEmpty(equipment.XuatXu))
+                                                {
+                                                    <span> | @equipment.XuatXu</span>
+                                                }
+                                            </div>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-8 text-gray-400">
+                                <i class="fas fa-exclamation-triangle text-4xl mb-3"></i>
+                                <p class="text-lg">Không có thiết bị khả dụng</p>
+                                <p class="text-sm">Vui lòng thêm thiết bị mới hoặc kiểm tra trạng thái thiết bị hiện tại</p>
+                                <a href="@Url.Action("CreateEquipment", "Admin")" class="inline-block mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                    <i class="fas fa-plus mr-2"></i>Thêm Thiết Bị
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <p class="text-xs text-gray-400">Chọn ít nhất một thiết bị cho phòng tập. Chỉ thiết bị khả dụng mới được hiển thị.</p>
+                </div>
+
+                <!-- Address -->
+                <div class="space-y-2">
+                    <label asp-for="DiaChi" class="block text-sm font-semibold text-blue-300">
+                        <i class="fas fa-map-marker-alt mr-2"></i>Địa Chỉ
+                    </label>
+                    <textarea asp-for="DiaChi" 
+                              rows="3"
+                              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                              placeholder="Địa chỉ chi tiết của phòng tập..." 
+                              required></textarea>
+                    <span asp-validation-for="DiaChi" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Form Guidelines -->
+                <div class="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-4">
+                    <h3 class="text-blue-300 font-semibold mb-2">
+                        <i class="fas fa-info-circle mr-2"></i>Hướng dẫn điền form:
+                    </h3>
+                    <ul class="text-sm text-blue-200 space-y-1">
+                        <li>• Tên phòng nên rõ ràng, phản ánh chức năng (VD: Phòng Cardio, Phòng Yoga, Phòng Tạ)</li>
+                        <li>• Vị trí nên cụ thể để dễ tìm kiếm và phân bổ</li>
+                        <li>• Sức chứa phù hợp với diện tích và mục đích sử dụng</li>
+                        <li>• <span class="text-yellow-300 font-medium">Bắt buộc chọn ít nhất một thiết bị cho phòng tập</span></li>
+                        <li>• Thiết bị đã được sử dụng ở phòng khác sẽ không hiển thị trong danh sách</li>
+                        <li>• Mô tả chi tiết giúp hội viên hiểu rõ về phòng tập</li>
+                    </ul>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 pt-6">
+                    <button type="submit" 
+                            class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-save mr-2"></i>Tạo Phòng Tập
+                    </button>
+                    <a asp-action="Rooms" 
+                       class="flex-1 text-center bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-times mr-2"></i>Hủy
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Room Management Tips -->
+        <div class="mt-8 bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <h3 class="text-xl font-semibold text-blue-300 mb-4">
+                <i class="fas fa-lightbulb mr-2"></i>Gợi ý quản lý phòng tập:
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
+                <div>
+                    <h4 class="font-semibold text-blue-200 mb-2">Phân loại phòng tập:</h4>
+                    <ul class="space-y-1">
+                        <li>• Phòng Cardio: Máy chạy bộ, xe đạp</li>
+                        <li>• Phòng Tạ: Tạ đơn, tạ kép, máy tập</li>
+                        <li>• Phòng Nhóm: Yoga, Aerobic, Zumba</li>
+                        <li>• Phòng Đặc Biệt: Boxing, Martial Arts</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-blue-200 mb-2">Tiêu chuẩn sức chứa:</h4>
+                    <ul class="space-y-1">
+                        <li>• Phòng nhỏ (< 30m²): 5-10 người</li>
+                        <li>• Phòng trung bình (30-60m²): 10-20 người</li>
+                        <li>• Phòng lớn (60-100m²): 20-35 người</li>
+                        <li>• Phòng rất lớn (> 100m²): 35+ người</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

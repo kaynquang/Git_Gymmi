@@ -1,0 +1,131 @@
+@model Gymmi.Models.HoiVien
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Hội Viên";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                    <i class="fas fa-edit mr-3"></i>Chỉnh Sửa Hội Viên
+                </h1>
+                <p class="text-gray-300 mt-2">Cập nhật thông tin hội viên trong hệ thống</p>
+            </div>
+            <a asp-action="Members" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Quay Lại
+            </a>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-gray-800 rounded-xl shadow-xl border border-gray-700 p-8">
+            <form asp-action="EditMember" method="post" class="space-y-6">
+                <input type="hidden" asp-for="ID_HoiVien" />
+                <input type="hidden" asp-for="ID_User" />
+                
+                <!-- Họ Tên -->
+                <div class="space-y-2">
+                    <label asp-for="HoTen" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-user mr-2"></i>Họ và Tên
+                    </label>
+                    <input asp-for="HoTen" type="text" 
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập họ và tên" required>
+                    <span asp-validation-for="HoTen" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Ngày Sinh -->
+                <div class="space-y-2">
+                    <label asp-for="NgaySinh" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-birthday-cake mr-2"></i>Ngày Sinh
+                    </label>
+                    <input asp-for="NgaySinh" type="date"
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                           required>
+                    <span asp-validation-for="NgaySinh" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Số Điện Thoại -->
+                <div class="space-y-2">
+                    <label asp-for="Sdt" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-phone mr-2"></i>Số Điện Thoại
+                    </label>
+                    <input asp-for="Sdt" type="tel" pattern="[0-9]{10,11}"
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập số điện thoại" required>
+                    <span asp-validation-for="Sdt" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="space-y-2">
+                    <label asp-for="Email" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-envelope mr-2"></i>Email
+                    </label>
+                    <input asp-for="Email" type="email"
+                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                           placeholder="Nhập địa chỉ email" required>
+                    <span asp-validation-for="Email" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Địa Chỉ -->
+                <div class="space-y-2">
+                    <label asp-for="DiaChi" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-map-marker-alt mr-2"></i>Địa Chỉ
+                    </label>
+                    <textarea asp-for="DiaChi" rows="3"
+                              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
+                              placeholder="Nhập địa chỉ"></textarea>
+                    <span asp-validation-for="DiaChi" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Giới Tính -->
+                <div class="space-y-2">
+                    <label asp-for="GioiTinh" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-venus-mars mr-2"></i>Giới Tính
+                    </label>
+                    <select asp-for="GioiTinh" 
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                        <option value="">Chọn giới tính</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                    <span asp-validation-for="GioiTinh" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Trạng Thái -->
+                <div class="space-y-2">
+                    <label asp-for="TrangThai" class="block text-sm font-medium text-gray-300">
+                        <i class="fas fa-info-circle mr-2"></i>Trạng Thái
+                    </label>
+                    <select asp-for="TrangThai" 
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                        <option value="Hoạt động">Hoạt động</option>
+                        <option value="Tạm ngưng">Tạm ngưng</option>
+                        <option value="Khóa">Khóa</option>
+                    </select>
+                    <span asp-validation-for="TrangThai" class="text-red-400 text-sm"></span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-4 pt-6">
+                    <button type="submit" 
+                            class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                        <i class="fas fa-save mr-2"></i>Cập Nhật Hội Viên
+                    </button>
+                    <a asp-action="Members" 
+                       class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 text-center">
+                        <i class="fas fa-times mr-2"></i>Hủy Bỏ
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

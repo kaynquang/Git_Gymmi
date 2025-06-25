@@ -1,0 +1,171 @@
+@model List<Gymmi.Models.HoiVien>
+@{
+    ViewData["Title"] = "Quản Lý Hội Viên";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-500 p-6 shadow-lg">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    <i class="fas fa-id-card mr-3"></i>
+                    Quản Lý Hội Viên
+                </h1>
+                <p class="text-blue-100 mt-2">Quản lý thông tin và thẻ hội viên phòng tập</p>
+            </div>
+            <a href="@Url.Action("CreateMember", "Admin")" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                <i class="fas fa-plus mr-2"></i>
+                Thêm Hội Viên
+            </a>
+        </div>
+    </div>
+
+    <!-- Error/Success Messages -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="p-6">
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-4">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                @ViewBag.Error
+            </div>
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="p-6">
+            <div class="bg-green-600 text-white p-4 rounded-lg mb-4">
+                <i class="fas fa-check-circle mr-2"></i>
+                @TempData["Success"]
+            </div>
+        </div>
+    }
+
+    <!-- Members List -->
+    <div class="p-6">
+        @if (Model.Any())
+        {
+            <div class="bg-gray-800 rounded-lg shadow-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-900">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Hội Viên
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Thông Tin
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Ngày Tham Gia
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Trạng Thái
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                    Thao Tác
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gray-800 divide-y divide-gray-700">
+                            @foreach (var member in Model)
+                            {
+                                <tr class="hover:bg-gray-750 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
+                                                    <i class="fas fa-user text-white"></i>
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-white">@member.HoTen</div>
+                                                <div class="text-sm text-gray-400">ID: @member.ID_HoiVien</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-white">@member.SoDienThoai</div>
+                                        <div class="text-sm text-gray-400">@member.Email</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-white">@member.NgayThamGia.ToString("dd/MM/yyyy")</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            Hoạt động
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <div class="flex space-x-2">
+                                            <a href="@Url.Action("EditMember", "Admin", new { id = member.ID_HoiVien })" 
+                                               class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs transition-colors">
+                                                <i class="fas fa-edit mr-1"></i>Sửa
+                                            </a>
+                                            <a href="@Url.Action("ViewMember", "Admin", new { id = member.ID_HoiVien })" 
+                                               class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition-colors">
+                                                <i class="fas fa-eye mr-1"></i>Xem
+                                            </a>
+                                            <button onclick="deleteMember(@member.ID_HoiVien)" 
+                                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors">
+                                                <i class="fas fa-trash mr-1"></i>Xóa
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="bg-gray-800 rounded-lg p-8 text-center">
+                <i class="fas fa-users text-6xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-semibold text-white mb-2">Chưa có hội viên nào</h3>
+                <p class="text-gray-400 mb-4">Bắt đầu bằng cách thêm hội viên đầu tiên</p>
+                <a href="@Url.Action("CreateMember", "Admin")" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i>
+                    Thêm Hội Viên
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+<script>
+function deleteMember(id) {
+    if (confirm('Bạn có chắc chắn muốn xóa hội viên này?\n\nLưu ý: Hội viên không thể xóa nếu có lịch tập hoặc thẻ hội viên đang hoạt động.')) {
+        // Create a form to submit the delete request
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '@Url.Action("DeleteMember", "Admin")';
+        
+        // Add anti-forgery token
+        const token = document.querySelector('input[name="__RequestVerificationToken"]');
+        if (token) {
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '__RequestVerificationToken';
+            tokenInput.value = token.value;
+            form.appendChild(tokenInput);
+        }
+        
+        // Add member ID
+        const idInput = document.createElement('input');
+        idInput.type = 'hidden';
+        idInput.name = 'id';
+        idInput.value = id;
+        form.appendChild(idInput);
+        
+        // Submit form
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script> 

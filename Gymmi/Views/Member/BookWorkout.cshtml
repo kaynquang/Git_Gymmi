@@ -1,0 +1,209 @@
+@{
+    ViewData["Title"] = "Đặt Lịch Tập";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+    
+    var rooms = ViewBag.Rooms as List<Gymmi.Models.PhongTap> ?? new List<Gymmi.Models.PhongTap>();
+    var activeMembership = ViewBag.ActiveMembership as Gymmi.Models.TheHoiVien;
+    var userId = ViewBag.UserId as int? ?? 1;
+}
+
+<!-- Header -->
+<div class="mb-8">
+    <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 text-white shadow-2xl">
+        <h1 class="text-4xl font-bold mb-2">
+            <i class="fas fa-plus-circle mr-3 text-emerald-300"></i>
+            Đặt Lịch Tập
+        </h1>
+        <p class="text-xl text-green-100">Lên lịch cho buổi tập tiếp theo của bạn</p>
+    </div>
+</div>
+
+<!-- Messages -->
+@if (TempData["Success"] != null)
+{
+    <div class="mb-6 bg-green-600 text-white p-4 rounded-lg shadow-lg">
+        <i class="fas fa-check-circle mr-2"></i>@TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="mb-6 bg-red-600 text-white p-4 rounded-lg shadow-lg">
+        <i class="fas fa-exclamation-triangle mr-2"></i>@TempData["Error"]
+    </div>
+}
+
+@if (activeMembership != null)
+{
+    <!-- Current Membership Info -->
+    <div class="mb-8 bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <h3 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-id-card mr-2 text-blue-400"></i>Thông Tin Gói Tập
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div>
+                <p class="text-gray-400 text-sm">Gói Tập</p>
+                <p class="text-xl font-bold text-white">@activeMembership.GoiTap?.TenGoi</p>
+            </div>
+            <div>
+                <p class="text-gray-400 text-sm">Loại Thẻ</p>
+                <p class="text-lg font-semibold text-blue-400">@activeMembership.LoaiTheHoiVien</p>
+            </div>
+            <div>
+                <p class="text-gray-400 text-sm">Hết Hạn</p>
+                <p class="text-lg font-semibold @((activeMembership.NgayHetHan - DateTime.Now).Days <= 7 ? "text-red-400" : "text-green-400")">
+                    @activeMembership.NgayHetHan.ToString("dd/MM/yyyy")
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Form -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-gray-800 rounded-xl p-8 shadow-xl border border-gray-700">
+            <h3 class="text-xl font-bold text-white mb-6">
+                <i class="fas fa-calendar-plus mr-2 text-green-400"></i>Thông Tin Đặt Lịch
+            </h3>
+
+            <form method="post" action="@Url.Action("BookWorkout", "Member")" id="bookingForm">
+                <input type="hidden" name="userId" value="@userId" />
+                
+                <div class="mb-6">
+                    <label class="block text-white font-semibold mb-2">
+                        <i class="fas fa-calendar mr-2 text-blue-400"></i>Chọn Ngày Tập *
+                    </label>
+                    <input type="date" name="workoutDate" id="workoutDate" 
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-green-400 focus:outline-none"
+                           min="@DateTime.Now.ToString("yyyy-MM-dd")" 
+                           max="@DateTime.Now.AddDays(30).ToString("yyyy-MM-dd")" required>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-white font-semibold mb-2">
+                        <i class="fas fa-clock mr-2 text-blue-400"></i>Chọn Giờ Tập *
+                    </label>
+                    <select name="workoutTime" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-green-400 focus:outline-none" required>
+                        <option value="">-- Chọn giờ tập --</option>
+                        <option value="06:00:00">06:00 - Buổi sáng sớm</option>
+                        <option value="07:00:00">07:00 - Buổi sáng</option>
+                        <option value="08:00:00">08:00 - Buổi sáng</option>
+                        <option value="17:00:00">17:00 - Buổi chiều</option>
+                        <option value="18:00:00">18:00 - Buổi tối</option>
+                        <option value="19:00:00">19:00 - Buổi tối</option>
+                        <option value="20:00:00">20:00 - Buổi tối</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-white font-semibold mb-2">
+                        <i class="fas fa-door-open mr-2 text-blue-400"></i>Chọn Phòng Tập *
+                    </label>
+                    @if (rooms.Any())
+                    {
+                        <select name="roomId" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-green-400 focus:outline-none" required>
+                            <option value="">-- Chọn phòng tập --</option>
+                            @foreach (var room in rooms)
+                            {
+                                <option value="@room.ID_PhongTap">@room.TenPhong - Slot: @room.SlotConLai/@room.SlotToiDa</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <div class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-gray-400">
+                            Hiện tại không có phòng tập nào khả dụng
+                        </div>
+                    }
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-white font-semibold mb-2">
+                        <i class="fas fa-comment mr-2 text-blue-400"></i>Ghi Chú (Tùy chọn)
+                    </label>
+                    <textarea name="description" rows="4"
+                              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-green-400 focus:outline-none resize-none"
+                              placeholder="Mô tả buổi tập, mục tiêu..."></textarea>
+                </div>
+
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 px-6 rounded-lg font-semibold transition-all">
+                        <i class="fas fa-calendar-check mr-2"></i>Đặt Lịch Tập
+                    </button>
+                    <a href="@Url.Action("Schedule", "Member")" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 px-6 rounded-lg font-semibold text-center transition-colors">
+                        <i class="fas fa-calendar-alt mr-2"></i>Xem Lịch Tập
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Room Information -->
+        <div class="space-y-6">
+            <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+                <h3 class="text-xl font-bold text-white mb-4">
+                    <i class="fas fa-building mr-2 text-purple-400"></i>Phòng Tập Khả Dụng
+                </h3>
+                @if (rooms.Any())
+                {
+                    <div class="space-y-3">
+                        @foreach (var room in rooms)
+                        {
+                            <div class="bg-gray-700 rounded-lg p-4">
+                                <h4 class="font-semibold text-white">@room.TenPhong</h4>
+                                <div class="flex justify-between items-center mt-2">
+                                    <p class="text-gray-400 text-sm">Sức chứa: @room.SucChua người</p>
+                                    <div class="text-right">
+                                        <p class="text-sm text-blue-400">Slot: @room.SlotConLai/@room.SlotToiDa</p>
+                                        @if(room.SlotConLai <= 5 && room.SlotConLai > 0)
+                                        {
+                                            <p class="text-xs text-yellow-400">Sắp hết chỗ</p>
+                                        }
+                                        else if(room.SlotConLai == 0)
+                                        {
+                                            <p class="text-xs text-red-400">Đã hết chỗ</p>
+                                        }
+                                    </div>
+                                </div>
+                                <p class="text-gray-500 text-xs mt-1">@room.DiaChi</p>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+                <h3 class="text-xl font-bold text-white mb-4">
+                    <i class="fas fa-info-circle mr-2 text-yellow-400"></i>Quy Định
+                </h3>
+                <div class="space-y-2 text-gray-300 text-sm">
+                    <div class="flex items-start">
+                        <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                        <span>Đặt lịch tối đa 30 ngày trước</span>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                        <span>Có thể hủy lịch trước 2 giờ</span>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-exclamation text-yellow-400 mr-2 mt-1"></i>
+                        <span>Cần có gói tập còn hiệu lực</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center py-16">
+        <i class="fas fa-exclamation-triangle text-6xl text-red-400 mb-6"></i>
+        <h2 class="text-2xl font-bold text-white mb-4">Bạn Chưa Có Gói Tập Hoạt Động</h2>
+        <p class="text-gray-400 mb-6">Để đặt lịch tập, bạn cần có gói tập còn hiệu lực.</p>
+        <div class="space-x-4">
+            <a href="@Url.Action("Packages", "Member")" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg">
+                <i class="fas fa-box mr-2"></i>Xem Gói Tập
+            </a>
+            <a href="@Url.Action("Dashboard", "Member")" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg">
+                <i class="fas fa-arrow-left mr-2"></i>Về Trang Chủ
+            </a>
+        </div>
+    </div>
+} 

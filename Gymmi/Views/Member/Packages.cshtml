@@ -1,0 +1,351 @@
+@model List<Gymmi.Models.GoiTap>
+@{
+    ViewData["Title"] = "Gói Tập";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<!-- Header -->
+<div class="mb-8">
+    <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-2xl">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-4xl font-bold mb-2">
+                    <i class="fas fa-box mr-3 text-pink-300"></i>
+                    Gói Tập Phòng Gym
+                </h1>
+                <p class="text-xl text-purple-100">Chọn gói tập phù hợp với nhu cầu của bạn</p>
+            </div>
+            <div class="hidden md:block">
+                <i class="fas fa-heart text-6xl text-purple-200 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Message -->
+@if (ViewBag.Error != null)
+{
+    <div class="mb-6">
+        <div class="bg-red-600 text-white p-4 rounded-lg shadow-lg">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            @ViewBag.Error
+        </div>
+    </div>
+}
+
+<!-- Package Categories Filter -->
+<div class="mb-8">
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <h3 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-filter mr-2 text-purple-400"></i>
+            Lọc Theo Loại Gói
+        </h3>
+        <div class="flex flex-wrap gap-3" id="package-filter">
+            <button class="filter-btn active bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors" data-filter="all">
+                Tất Cả
+            </button>
+            <button class="filter-btn bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors" data-filter="basic">
+                Cơ Bản
+            </button>
+            <button class="filter-btn bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors" data-filter="premium">
+                Premium
+            </button>
+            <button class="filter-btn bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors" data-filter="vip">
+                VIP
+            </button>
+        </div>
+    </div>
+</div>
+
+@if (Model?.Any() == true)
+{
+    <!-- Package Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        @foreach (var package in Model)
+        {
+            var isExpired = package.NgayKetThuc < DateTime.Now;
+            var daysLeft = (package.NgayKetThuc - DateTime.Now).Days;
+            var packageType = package.LoaiGoiTap.ToLower().Contains("premium") ? "premium" : 
+                             package.LoaiGoiTap.ToLower().Contains("vip") ? "vip" : "basic";
+            
+            <div class="package-card bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden hover-scale transform transition-all duration-300 @(isExpired ? "opacity-50" : "")" data-category="@packageType">
+                <!-- Package Header -->
+                <div class="bg-gradient-to-r @(packageType == "vip" ? "from-yellow-500 to-orange-500" : packageType == "premium" ? "from-purple-500 to-pink-500" : "from-blue-500 to-indigo-500") p-6 text-white text-center relative">
+                    @if (packageType == "vip")
+                    {
+                        <div class="absolute top-2 right-2">
+                            <span class="bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-bold">
+                                <i class="fas fa-crown mr-1"></i>VIP
+                            </span>
+                        </div>
+                    }
+                    else if (packageType == "premium")
+                    {
+                        <div class="absolute top-2 right-2">
+                            <span class="bg-pink-400 text-pink-900 px-2 py-1 rounded-full text-xs font-bold">
+                                <i class="fas fa-star mr-1"></i>Premium
+                            </span>
+                        </div>
+                    }
+                    
+                    <h3 class="text-2xl font-bold mb-2">@package.TenGoi</h3>
+                    <p class="text-lg opacity-90">@package.LoaiGoiTap</p>
+                    
+                    <!-- Price -->
+                    <div class="mt-4">
+                        <span class="text-4xl font-bold">@package.GiaTien.ToString("N0")</span>
+                        <span class="text-lg">VNĐ</span>
+                        <p class="text-sm opacity-75">@package.SoNgay ngày</p>
+                    </div>
+                </div>
+
+                <!-- Package Content -->
+                <div class="p-6">
+                    <!-- Duration Info -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between text-sm text-gray-400 mb-2">
+                            <span>Thời hạn:</span>
+                            <span class="font-semibold">@package.SoNgay ngày</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm text-gray-400 mb-2">
+                            <span>Hiệu lực từ:</span>
+                            <span>@package.NgayBatDau.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm text-gray-400">
+                            <span>Hiệu lực đến:</span>
+                            <span class="@(isExpired ? "text-red-400" : daysLeft <= 30 ? "text-yellow-400" : "text-green-400")">
+                                @package.NgayKetThuc.ToString("dd/MM/yyyy")
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Package Features -->
+                    <div class="mb-6">
+                        <h4 class="text-white font-semibold mb-3">
+                            <i class="fas fa-check-circle mr-2 text-green-400"></i>
+                            Quyền Lợi:
+                        </h4>
+                        <ul class="space-y-2 text-gray-300 text-sm">
+                            <li class="flex items-center">
+                                <i class="fas fa-dumbbell text-green-400 mr-2 w-4"></i>
+                                Sử dụng toàn bộ thiết bị gym
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-swimming-pool text-green-400 mr-2 w-4"></i>
+                                Truy cập tất cả phòng tập
+                            </li>
+                            @if (packageType == "premium" || packageType == "vip")
+                            {
+                                <li class="flex items-center">
+                                    <i class="fas fa-user-tie text-green-400 mr-2 w-4"></i>
+                                    Tư vấn từ huấn luyện viên
+                                </li>
+                            }
+                            @if (packageType == "vip")
+                            {
+                                <li class="flex items-center">
+                                    <i class="fas fa-spa text-green-400 mr-2 w-4"></i>
+                                    Dịch vụ spa & massage
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-parking text-green-400 mr-2 w-4"></i>
+                                    Chỗ đậu xe miễn phí
+                                </li>
+                            }
+                            <li class="flex items-center">
+                                <i class="fas fa-calendar-alt text-green-400 mr-2 w-4"></i>
+                                Đặt lịch tập linh hoạt
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Description -->
+                    @if (!string.IsNullOrEmpty(package.MoTa))
+                    {
+                        <div class="mb-6">
+                            <h4 class="text-white font-semibold mb-2">
+                                <i class="fas fa-info-circle mr-2 text-blue-400"></i>
+                                Mô Tả:
+                            </h4>
+                            <p class="text-gray-400 text-sm">@package.MoTa</p>
+                        </div>
+                    }
+
+                    <!-- Action Button -->
+                    <div class="pt-4 border-t border-gray-700">
+                        @if (isExpired)
+                        {
+                            <button class="w-full bg-gray-600 text-gray-400 py-3 rounded-lg cursor-not-allowed" disabled>
+                                <i class="fas fa-times-circle mr-2"></i>
+                                Gói Đã Hết Hạn
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="w-full bg-gradient-to-r @(packageType == "vip" ? "from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600" : packageType == "premium" ? "from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600" : "from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600") text-white py-3 rounded-lg font-semibold transition-all hover-scale" onclick="purchasePackage(@package.ID_GoiTap, '@package.TenGoi', @package.GiaTien)">
+                                <i class="fas fa-shopping-cart mr-2"></i>
+                                Mua Gói Này
+                            </button>
+                        }
+                    </div>
+
+                    <!-- Price per Day -->
+                    <div class="mt-3 text-center">
+                        <span class="text-xs text-gray-500">
+                            Chỉ @((package.GiaTien / package.SoNgay).ToString("N0")) VNĐ/ngày
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Package Comparison Table -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 mb-8">
+        <h3 class="text-xl font-bold text-white mb-6">
+            <i class="fas fa-balance-scale mr-2 text-blue-400"></i>
+            So Sánh Gói Tập
+        </h3>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-700">
+                        <th class="text-left py-3 text-gray-400">Tính Năng</th>
+                        <th class="text-center py-3 text-gray-400">Cơ Bản</th>
+                        <th class="text-center py-3 text-gray-400">Premium</th>
+                        <th class="text-center py-3 text-gray-400">VIP</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-300">
+                    <tr class="border-b border-gray-700">
+                        <td class="py-3">Sử dụng thiết bị gym</td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                    </tr>
+                    <tr class="border-b border-gray-700">
+                        <td class="py-3">Truy cập phòng tập</td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                    </tr>
+                    <tr class="border-b border-gray-700">
+                        <td class="py-3">Tư vấn huấn luyện viên</td>
+                        <td class="text-center py-3"><i class="fas fa-times text-red-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                    </tr>
+                    <tr class="border-b border-gray-700">
+                        <td class="py-3">Dịch vụ spa & massage</td>
+                        <td class="text-center py-3"><i class="fas fa-times text-red-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-times text-red-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                    </tr>
+                    <tr class="border-b border-gray-700">
+                        <td class="py-3">Chỗ đậu xe miễn phí</td>
+                        <td class="text-center py-3"><i class="fas fa-times text-red-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-times text-red-400"></i></td>
+                        <td class="text-center py-3"><i class="fas fa-check text-green-400"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Purchase Tips -->
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <h3 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-lightbulb mr-2 text-yellow-400"></i>
+            Lưu Ý Khi Mua Gói Tập
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
+            <div>
+                <h4 class="font-semibold text-white mb-2">
+                    <i class="fas fa-info-circle mr-2 text-blue-400"></i>
+                    Thông Tin Quan Trọng:
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li>• Gói tập có hiệu lực ngay sau khi thanh toán</li>
+                    <li>• Không thể hoàn tiền sau khi đã kích hoạt</li>
+                    <li>• Có thể gia hạn trước khi hết hạn</li>
+                    <li>• Liên hệ nhân viên nếu cần hỗ trợ</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-2">
+                    <i class="fas fa-credit-card mr-2 text-green-400"></i>
+                    Phương Thức Thanh Toán:
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li>• Tiền mặt tại quầy lễ tân</li>
+                    <li>• Chuyển khoản ngân hàng</li>
+                    <li>• Ví điện tử (MoMo, ZaloPay)</li>
+                    <li>• Thẻ tín dụng/ghi nợ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <!-- No Packages Available -->
+    <div class="text-center py-16">
+        <i class="fas fa-box-open text-6xl text-gray-400 mb-6"></i>
+        <h2 class="text-2xl font-bold text-white mb-4">Hiện Tại Chưa Có Gói Tập Nào</h2>
+        <p class="text-gray-400 mb-6">Vui lòng quay lại sau hoặc liên hệ với nhân viên để được hỗ trợ.</p>
+        <a href="@Url.Action("Dashboard", "Member")" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Về Trang Chủ
+        </a>
+    </div>
+}
+
+@section Scripts {
+<script>
+    // Package filter functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const packageCards = document.querySelectorAll('.package-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                
+                // Update active button
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-purple-600');
+                    btn.classList.add('bg-gray-600');
+                });
+                this.classList.add('active', 'bg-purple-600');
+                this.classList.remove('bg-gray-600');
+
+                // Filter packages
+                packageCards.forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    if (filter === 'all' || category === filter) {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'scale(1)';
+                        }, 100);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+    });
+
+    // Purchase package function
+    function purchasePackage(packageId, packageName, price) {
+        if (confirm(`Bạn có chắc chắn muốn mua gói "${packageName}" với giá ${price.toLocaleString()} VNĐ?`)) {
+            alert('Tính năng thanh toán sẽ được phát triển trong phiên bản tiếp theo.\nVui lòng liên hệ nhân viên để được hỗ trợ mua gói tập.');
+        }
+    }
+</script>
+} 
